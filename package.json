@@ -1,0 +1,26 @@
+{
+  "name": "tetrisrx",
+  "version": "0.0.1",
+  "description": "A tetris game implemented with typescript and rxjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --watch --inline"
+  },
+  "keywords": [
+    "tetris",
+    "rxjs",
+    "typescript"
+  ],
+  "author": "Jonathan Oudshoorn",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^5.4.3"
+  },
+  "devDependencies": {
+    "@types/rx": "^4.1.1",
+    "ts-loader": "^2.3.3",
+    "typescript": "^2.4.2",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  }
+}
