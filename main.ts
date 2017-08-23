@@ -1,12 +1,13 @@
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/from'
+import {TetrisGameField} from "./game/TetrisGameField";
 
-let numbers:string[] = ["hello world", "hello tetris"];
-let source = Observable.from(numbers);
+const TETRIS_HEIGHT: number = 800;
+const TETRIS_WIDTH: number = 600;
 
-source.subscribe(
-    value => console.log(`value: ${value}`),
-    e => console.log(`error: ${e}`),
-    () => console.log('complete')
-);
+let tetrisDivElement: HTMLElement = document.getElementById("tetris-game-div")!;
+let tetrisCanvasDiv: HTMLElement = document.createElement("tetris-gamefield-div");
+tetrisDivElement.appendChild(tetrisCanvasDiv);
+
+let gameField:TetrisGameField = new TetrisGameField(TETRIS_HEIGHT, TETRIS_WIDTH, tetrisCanvasDiv);
+gameField.startGame();
+
 
