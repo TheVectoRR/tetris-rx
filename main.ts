@@ -1,13 +1,25 @@
-import {TetrisGameField} from "./game/TetrisGameField";
+import {TetrisGameController} from "./game/TetrisGameController";
 
-const TETRIS_HEIGHT: number = 800;
-const TETRIS_WIDTH: number = 600;
+const CANVAS_DIV_ID: string = 'tetrisCanvas';
+const TETRIS_WIDTH: number = 350;
+const TETRIS_HEIGHT: number = 700;
 
-let tetrisDivElement: HTMLElement = document.getElementById("tetris-game-div")!;
-let tetrisCanvasDiv: HTMLElement = document.createElement("tetris-gamefield-div");
-tetrisDivElement.appendChild(tetrisCanvasDiv);
 
-let gameField:TetrisGameField = new TetrisGameField(TETRIS_HEIGHT, TETRIS_WIDTH, tetrisCanvasDiv);
-gameField.startGame();
+function initGameElements() {
+    let tetrisDivElement: HTMLElement = document.getElementById("tetris-game-div")!;
+    let tetrisCanvasDiv: HTMLElement = document.createElement("tetris-gamefield-div");
+    tetrisCanvasDiv.innerHTML = `
+        <canvas id="${CANVAS_DIV_ID}" width="${TETRIS_WIDTH}" height="${TETRIS_HEIGHT}" style="border:1px solid #000000;">
+        </canvas>`;
+    tetrisDivElement.appendChild(tetrisCanvasDiv);
+}
+
+function initGame() {
+    let gameField: TetrisGameController = new TetrisGameController(TETRIS_WIDTH, TETRIS_HEIGHT, CANVAS_DIV_ID);
+    gameField.drawBoard();
+}
+
+initGameElements();
+initGame();
 
 
