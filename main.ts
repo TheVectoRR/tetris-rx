@@ -16,7 +16,7 @@ function initGameElements() {
 
 function initGame() {
     let gameController: TetrisGameController = new TetrisGameController(TETRIS_WIDTH, TETRIS_HEIGHT, CANVAS_DIV_ID);
-    gameController.drawBoard();
+    gameController.drawGrid();
 }
 
 initGameElements();

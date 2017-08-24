@@ -14,7 +14,7 @@ export class LShape extends TetrisShape{
         )
     }
 
-    rotate(): void {
+    public rotate(): void {
         console.log('rotate LShape');
     }
 

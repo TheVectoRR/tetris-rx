@@ -6,7 +6,7 @@ export class TetrisGrid {
     private _blocks: TetrisBlock[] = [];
     private _movingShape: TetrisShape;
 
-    constructor() {
+    constructor(private blocksWide:number, private blocksHigh:number) {
         this._blocks.push(
             {xPos: 0, yPos: 19, color: 'red'},
             {xPos: 1, yPos: 19, color: 'blue'},
@@ -23,5 +23,35 @@ export class TetrisGrid {
 
     get movingShape(): TetrisShape {
         return this._movingShape;
+    }
+
+    public moveRight(): void {
+        if(this.movingShape.blocks.filter((block) =>
+            (block.xPos >= this.blocksWide-1) || this.isBlockAtPosition(block.xPos +1, block.yPos)).length === 0){
+            this.movingShape.moveRight();
+        }
+    }
+
+    public moveLeft(): void {
+        if(this.movingShape.blocks.filter((block) =>
+            (block.xPos <= 0) || this.isBlockAtPosition(block.xPos -1, block.yPos)).length === 0){
+            this.movingShape.moveLeftt();
+        }
+    }
+
+    public moveDown(): void {
+        if(this.movingShape.blocks.filter((block) =>
+            (block.yPos >= this.blocksHigh-1) || this.isBlockAtPosition(block.xPos, block.yPos+1)).length === 0){
+            this.movingShape.moveDown();
+        }
+    }
+
+    private isBlockAtPosition(x:number, y: number): boolean{
+        for(let block of this.blocks){
+            if(block.xPos === x && block.yPos === y){
+                return true;
+            }
+        }
+        return false;
     }
 }

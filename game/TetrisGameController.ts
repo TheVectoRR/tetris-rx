@@ -11,14 +11,37 @@ export class TetrisGameController {
     constructor(readonly width: number,
                 readonly height: number,
                 readonly canvasId: string) {
-        this.tetrisGrid = new TetrisGrid();
+        this.tetrisGrid = new TetrisGrid(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT);
     }
 
-    public drawBoard():void{
+    public drawGrid():void{
         let canvas:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById(this.canvasId);
         let ctx:CanvasRenderingContext2D = <CanvasRenderingContext2D>canvas.getContext("2d");
         let pixelWidth:number = this.width/TETRIS_BLOCKS_WIDTH;
         let pixelHeight:number = this.height/TETRIS_BLOCKS_HEIGHT;
+
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+        this.tetrisGrid.moveDown();
+
+
+
         for(let block of this.tetrisGrid.blocks){
             this.drawBlock(ctx, block, pixelWidth, pixelHeight)
         }

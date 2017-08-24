@@ -4,24 +4,24 @@ export abstract class TetrisShape {
 
     blocks: TetrisBlock[] = [];
 
-    moveRight(): void {
+    public moveRight(): void {
         for (let block of this.blocks) {
             block.xPos += 1;
         }
     }
 
-    moveLeftt(): void {
+    public moveLeftt(): void {
         for (let block of this.blocks) {
             block.xPos += -1;
         }
     }
 
-    moveDown(): void {
+    public moveDown(): void {
         for (let block of this.blocks) {
             block.yPos += 1;
         }
     }
 
-    abstract rotate(): void;
+    public abstract rotate(): void;
 
 }
