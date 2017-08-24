@@ -1,4 +1,6 @@
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/map';
 import {TetrisAction} from "../game-objects/TetrisModels";
 
 
