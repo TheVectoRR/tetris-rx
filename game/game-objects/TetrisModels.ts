@@ -3,3 +3,5 @@ export interface TetrisBlock {
     yPos: number;
     color: string;
 }
+
+export enum TetrisAction{LEFT, RIGHT, DOWN}
