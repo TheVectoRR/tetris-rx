@@ -17,7 +17,11 @@ export class TetrisGrid {
         return this._blocks;
     }
 
-    public collisionDetected(block: TetrisBlock): boolean {
+    public collisionDetection(blocks: TetrisBlock[]): boolean{
+        return blocks.filter((block) => this.collisionDetected(block)).length === 0
+    }
+
+    private collisionDetected(block: TetrisBlock): boolean {
         return block.xPos < 0 || block.xPos > this.numOfBlocksWide-1 || block.yPos > this.numOfBlocksHigh-1 ||
          this.isBlockAtPosition(block.xPos, block.yPos)
     }

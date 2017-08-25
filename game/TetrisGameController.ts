@@ -20,32 +20,28 @@ export class TetrisGameController {
 
     private moveRight(): void {
         let cloneShape: TetrisShape = this.movingShape.clone().moveRight();
-        if(cloneShape.blocks.filter((block) =>
-            this.tetrisGrid.collisionDetected(block)).length === 0){
+        if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.moveRight();
         }
     }
 
     private moveLeft(): void {
         let cloneShape: TetrisShape = this.movingShape.clone().moveLeft();
-        if(cloneShape.blocks.filter((block) =>
-                this.tetrisGrid.collisionDetected(block)).length === 0){
+        if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.moveLeft();
         }
     }
 
     private moveDown(): void {
         let cloneShape: TetrisShape = this.movingShape.clone().moveDown();
-        if(cloneShape.blocks.filter((block) =>
-                this.tetrisGrid.collisionDetected(block)).length === 0){
+        if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.moveDown();
         }
     }
 
     private rotate() {
         let cloneShape: TetrisShape = this.movingShape.clone().rotate();
-        if(cloneShape.blocks.filter((block) =>
-                this.tetrisGrid.collisionDetected(block)).length === 0){
+        if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.rotate();
         }
     }
