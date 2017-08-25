@@ -44,7 +44,7 @@ export class TetrisGrid {
 
     public removeRow(rowIndex: number) {
         for(let i = rowIndex; i >= 1; i--){
-            this.blocksMap.set(i, this.blocksMap.get(i-1)!)
+            this.blocksMap.set(i, this.blocksMap.get(i-1)!);
             for(let block of this.blocksMap.get(i)!){
                 block.yPos = i;
             }

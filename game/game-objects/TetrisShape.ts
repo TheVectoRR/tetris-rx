@@ -5,23 +5,17 @@ export abstract class TetrisShape {
     blocks: TetrisBlock[] = [];
 
     public moveRight(): this {
-        for (let block of this.blocks) {
-            block.xPos += 1;
-        }
+        this.blocks.map(block => block.xPos += 1);
         return this;
     }
 
     public moveLeft(): this {
-        for (let block of this.blocks) {
-            block.xPos -= 1;
-        }
+        this.blocks.map(block => block.xPos -= 1);
         return this;
     }
 
     public moveDown(): this {
-        for (let block of this.blocks) {
-            block.yPos += 1;
-        }
+        this.blocks.map(block => block.yPos += 1);
         return this;
     }
 
