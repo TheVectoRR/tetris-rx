@@ -10,7 +10,7 @@ export abstract class TetrisShape {
         }
     }
 
-    public moveLeftt(): void {
+    public moveLeft(): void {
         for (let block of this.blocks) {
             block.xPos += -1;
         }

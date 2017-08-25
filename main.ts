@@ -1,5 +1,5 @@
 import {TetrisGameController} from "./game/TetrisGameController";
-import {TetrisGraphics} from "./game/TetrisGraphics";
+import {TetrisCanvasGraphics, TetrisGraphics} from "./game/TetrisGraphics";
 
 const CANVAS_DIV_ID: string = 'tetrisCanvas';
 const TETRIS_BLOCKS_WIDTH: number = 10;
@@ -20,7 +20,7 @@ function initCanvasElements(): CanvasRenderingContext2D {
 }
 
 function initGame(ctx: CanvasRenderingContext2D) {
-    let tetrisGraphics: TetrisGraphics = new TetrisGraphics(
+    let tetrisGraphics: TetrisGraphics = new TetrisCanvasGraphics(
         ctx, TETRIS_WIDTH / TETRIS_BLOCKS_WIDTH, TETRIS_HEIGHT / TETRIS_BLOCKS_HEIGHT, TETRIS_WIDTH, TETRIS_HEIGHT);
     let gameController: TetrisGameController = new TetrisGameController(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT, tetrisGraphics);
     gameController.observeKeyboard();

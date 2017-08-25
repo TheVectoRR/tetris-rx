@@ -17,11 +17,11 @@ export class LShape extends TetrisShape {
     }
 
     public rotate(): void {
-        this.rotateShape(this)
+        LShape.rotateShape(this);
         this.rotatePosition = (this.rotatePosition+1)%4;
     }
 
-    private rotateShape(shape: LShape): LShape{
+    private static rotateShape(shape: LShape): LShape{
         switch (shape.rotatePosition) {
             case 0:
                 shape.blocks[0].xPos += 1;

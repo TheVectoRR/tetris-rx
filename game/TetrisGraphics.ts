@@ -1,5 +1,11 @@
 import {TetrisBlock} from "./game-objects/TetrisModels";
-export class TetrisGraphics {
+
+export interface TetrisGraphics{
+    drawBlocks(blocks:TetrisBlock[]):void;
+    clearDraw():void;
+}
+
+export class TetrisCanvasGraphics implements TetrisGraphics{
 
     constructor(private ctx: CanvasRenderingContext2D,
                 private pixelWidth: number,

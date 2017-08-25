@@ -1,5 +1,5 @@
 import {TetrisGrid} from "./game-objects/TetrisGrid";
-import {TetrisAction} from "./game-objects/TetrisModels";
+import {TetrisActionNames} from "./game-objects/TetrisModels";
 import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
 import {TetrisGraphics} from "./TetrisGraphics";
 import {TetrisShape} from "./game-objects/TetrisShape";
@@ -28,7 +28,7 @@ export class TetrisGameController {
     private moveLeft(): void {
         if(this.movingShape.blocks.filter((block) =>
             (block.xPos <= 0) || this.tetrisGrid.isBlockAtPosition(block.xPos -1, block.yPos)).length === 0){
-            this.movingShape.moveLeftt();
+            this.movingShape.moveLeft();
         }
     }
 
@@ -46,20 +46,20 @@ export class TetrisGameController {
 
     public observeKeyboard() {
         keyboardObservable.subscribe(
-            (value: TetrisAction) => {
+            (value: TetrisActionNames) => {
                 this.tetrisGraphics.clearDraw();
 
                 switch(value){
-                    case TetrisAction.LEFT:
+                    case TetrisActionNames.LEFT:
                         this.moveLeft();
                         break;
-                    case TetrisAction.RIGHT:
+                    case TetrisActionNames.RIGHT:
                         this.moveRight();
                         break;
-                    case TetrisAction.DOWN:
+                    case TetrisActionNames.DOWN:
                         this.moveDown();
                         break;
-                    case TetrisAction.ROTATE:
+                    case TetrisActionNames.ROTATE:
                         this.rotate();
                         break;
 
