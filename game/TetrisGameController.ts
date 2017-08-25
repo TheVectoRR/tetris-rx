@@ -13,35 +13,41 @@ export class TetrisGameController {
     constructor(readonly numOfBlocksWide: number,
                 readonly numOfBlocksHigh: number,
                 readonly tetrisGraphics: TetrisGraphics) {
-        this.tetrisGrid = new TetrisGrid();
+        this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
         this.movingShape = new LShape();
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.blocks);
     }
 
     private moveRight(): void {
-        if(this.movingShape.blocks.filter((block) =>
-            (block.xPos >= this.numOfBlocksWide-1) || this.tetrisGrid.isBlockAtPosition(block.xPos +1, block.yPos)).length === 0){
+        let cloneShape: TetrisShape = this.movingShape.clone().moveRight();
+        if(cloneShape.blocks.filter((block) =>
+            this.tetrisGrid.collisionDetected(block)).length === 0){
             this.movingShape.moveRight();
         }
     }
 
     private moveLeft(): void {
-        if(this.movingShape.blocks.filter((block) =>
-            (block.xPos <= 0) || this.tetrisGrid.isBlockAtPosition(block.xPos -1, block.yPos)).length === 0){
+        let cloneShape: TetrisShape = this.movingShape.clone().moveLeft();
+        if(cloneShape.blocks.filter((block) =>
+                this.tetrisGrid.collisionDetected(block)).length === 0){
             this.movingShape.moveLeft();
         }
     }
 
     private moveDown(): void {
-        if(this.movingShape.blocks.filter((block) =>
-            (block.yPos >= this.numOfBlocksHigh-1) || this.tetrisGrid.isBlockAtPosition(block.xPos, block.yPos+1)).length === 0){
+        let cloneShape: TetrisShape = this.movingShape.clone().moveDown();
+        if(cloneShape.blocks.filter((block) =>
+                this.tetrisGrid.collisionDetected(block)).length === 0){
             this.movingShape.moveDown();
         }
     }
 
     private rotate() {
-        // TODO: collision detection for rotate
-        this.movingShape.rotate();
+        let cloneShape: TetrisShape = this.movingShape.clone().rotate();
+        if(cloneShape.blocks.filter((block) =>
+                this.tetrisGrid.collisionDetected(block)).length === 0){
+            this.movingShape.rotate();
+        }
     }
 
     public observeKeyboard() {
