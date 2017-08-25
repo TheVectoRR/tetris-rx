@@ -15,7 +15,7 @@ export class TetrisGameController {
                 readonly tetrisGraphics: TetrisGraphics) {
         this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
         this.movingShape = new LShape();
-        this.tetrisGraphics.drawBlocks(this.tetrisGrid.blocks);
+        this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
     }
 
     private moveRight(): void {
@@ -35,7 +35,9 @@ export class TetrisGameController {
     private moveDown(): void {
         let cloneShape: TetrisShape = this.movingShape.clone().moveDown();
         if(this.tetrisGrid.blockCollisionDetection(cloneShape.blocks)){
-            this.tetrisGrid.giveBlocks(this.movingShape.blocks);
+            this.tetrisGrid.giveBlocksToGrid(this.movingShape.blocks);
+            let numOfFullRows:number[] = this.tetrisGrid.detectFullRows(); // TODO create and update score
+            numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
             this.movingShape = new LShape(); // TODO: get a new random shape
         }
         else if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
@@ -71,7 +73,7 @@ export class TetrisGameController {
 
                 }
 
-                this.tetrisGraphics.drawBlocks(this.tetrisGrid.blocks);
+                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
                 this.tetrisGraphics.drawBlocks(this.movingShape.blocks);
             },
             e => console.log(`error: ${e}`),
