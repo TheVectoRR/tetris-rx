@@ -1,68 +1,72 @@
 import {TetrisGrid} from "./game-objects/TetrisGrid";
-import {TetrisAction, TetrisBlock} from "./game-objects/TetrisModels";
+import {TetrisAction} from "./game-objects/TetrisModels";
 import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
-
-const TETRIS_BLOCKS_WIDTH: number = 10;
-const TETRIS_BLOCKS_HEIGHT: number = 20;
+import {TetrisGraphics} from "./TetrisGraphics";
+import {TetrisShape} from "./game-objects/TetrisShape";
+import {LShape} from "./game-objects/LShape";
 
 export class TetrisGameController {
 
     private tetrisGrid: TetrisGrid;
-    private ctx: CanvasRenderingContext2D;
-    private pixelWidth: number;
-    private pixelHeight: number;
+    private movingShape: TetrisShape;
 
-    constructor(readonly width: number,
-                readonly height: number,
-                readonly canvasId: string) {
-        this.tetrisGrid = new TetrisGrid(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT);
-        this.pixelWidth = this.width / TETRIS_BLOCKS_WIDTH;
-        this.pixelHeight = this.height / TETRIS_BLOCKS_HEIGHT;
+    constructor(readonly numOfBlocksWide: number,
+                readonly numOfBlocksHigh: number,
+                readonly tetrisGraphics: TetrisGraphics) {
+        this.tetrisGrid = new TetrisGrid();
+        this.movingShape = new LShape();
+        this.tetrisGraphics.drawBlocks(this.tetrisGrid.blocks);
     }
 
-    public initDrawGrid(): void {
-        let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById(this.canvasId);
-        this.ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
-        this.redraw();
-    }
-
-    private redraw(): void {
-        this.ctx.clearRect(0, 0, 350, 700);
-        for (let block of this.tetrisGrid.blocks) {
-            this.drawBlock(block)
-        }
-        for (let block of this.tetrisGrid.movingShape.blocks) {
-            this.drawBlock(block)
+    private moveRight(): void {
+        if(this.movingShape.blocks.filter((block) =>
+            (block.xPos >= this.numOfBlocksWide-1) || this.tetrisGrid.isBlockAtPosition(block.xPos +1, block.yPos)).length === 0){
+            this.movingShape.moveRight();
         }
     }
 
-    private drawBlock(block: TetrisBlock) {
-        this.ctx.beginPath();
-        this.ctx.rect(block.xPos * this.pixelWidth, block.yPos * this.pixelHeight, this.pixelHeight, this.pixelWidth);
-        this.ctx.fillStyle = block.color;
-        this.ctx.lineWidth = 4;
-        this.ctx.strokeStyle = "black";
-        this.ctx.fill();
-        this.ctx.stroke();
+    private moveLeft(): void {
+        if(this.movingShape.blocks.filter((block) =>
+            (block.xPos <= 0) || this.tetrisGrid.isBlockAtPosition(block.xPos -1, block.yPos)).length === 0){
+            this.movingShape.moveLeftt();
+        }
+    }
+
+    private moveDown(): void {
+        if(this.movingShape.blocks.filter((block) =>
+            (block.yPos >= this.numOfBlocksHigh-1) || this.tetrisGrid.isBlockAtPosition(block.xPos, block.yPos+1)).length === 0){
+            this.movingShape.moveDown();
+        }
+    }
+
+    private rotate() {
+        // TODO: collision detection for rotate
+        this.movingShape.rotate();
     }
 
     public observeKeyboard() {
-
         keyboardObservable.subscribe(
             (value: TetrisAction) => {
-                if (value === TetrisAction.DOWN) {
-                    this.tetrisGrid.moveDown();
-                    this.redraw();
-                } else if (value === TetrisAction.LEFT) {
-                    this.tetrisGrid.moveLeft();
-                    this.redraw();
-                } else if (value === TetrisAction.RIGHT) {
-                    this.tetrisGrid.moveRight();
-                    this.redraw();
-                } else if (value === TetrisAction.ROTATE) {
-                    this.tetrisGrid.rotate();
-                    this.redraw();
+                this.tetrisGraphics.clearDraw();
+
+                switch(value){
+                    case TetrisAction.LEFT:
+                        this.moveLeft();
+                        break;
+                    case TetrisAction.RIGHT:
+                        this.moveRight();
+                        break;
+                    case TetrisAction.DOWN:
+                        this.moveDown();
+                        break;
+                    case TetrisAction.ROTATE:
+                        this.rotate();
+                        break;
+
                 }
+
+                this.tetrisGraphics.drawBlocks(this.tetrisGrid.blocks);
+                this.tetrisGraphics.drawBlocks(this.movingShape.blocks);
             },
             e => console.log(`error: ${e}`),
             () => console.log('complete')
