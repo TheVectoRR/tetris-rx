@@ -1,22 +1,22 @@
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
-import {TetrisActionNames} from "../game-objects/TetrisModels";
+import {TetrisActionName} from "../game-objects/TetrisModels";
 
 
-export let keyboardObservable:Observable<TetrisActionNames|undefined> = Observable.fromEvent(document, "keydown")
+export let keyboardObservable:Observable<TetrisActionName|undefined> = Observable.fromEvent(document, "keydown")
     .map((e: KeyboardEvent) => {
         if (e.key === 'ArrowDown') {
-            return TetrisActionNames.DOWN;
+            return TetrisActionName.DOWN;
         }
         else if (e.key === 'ArrowLeft') {
-            return TetrisActionNames.LEFT;
+            return TetrisActionName.LEFT;
         }
         else if (e.key === 'ArrowRight') {
-            return TetrisActionNames.RIGHT;
+            return TetrisActionName.RIGHT;
         }
         else if (e.key === 'ArrowUp') {
-            return TetrisActionNames.ROTATE;
+            return TetrisActionName.ROTATE;
         }
 
     });

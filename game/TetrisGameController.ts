@@ -1,5 +1,5 @@
 import {TetrisGrid} from "./game-objects/TetrisGrid";
-import {TetrisActionNames} from "./game-objects/TetrisModels";
+import {TetrisActionName} from "./game-objects/TetrisModels";
 import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
 import {TetrisGraphics} from "./TetrisGraphics";
 import {TetrisShape} from "./game-objects/TetrisShape";
@@ -46,20 +46,20 @@ export class TetrisGameController {
 
     public observeKeyboard() {
         keyboardObservable.subscribe(
-            (value: TetrisActionNames) => {
+            (value: TetrisActionName) => {
                 this.tetrisGraphics.clearDraw();
 
                 switch(value){
-                    case TetrisActionNames.LEFT:
+                    case TetrisActionName.LEFT:
                         this.moveLeft();
                         break;
-                    case TetrisActionNames.RIGHT:
+                    case TetrisActionName.RIGHT:
                         this.moveRight();
                         break;
-                    case TetrisActionNames.DOWN:
+                    case TetrisActionName.DOWN:
                         this.moveDown();
                         break;
-                    case TetrisActionNames.ROTATE:
+                    case TetrisActionName.ROTATE:
                         this.rotate();
                         break;
 

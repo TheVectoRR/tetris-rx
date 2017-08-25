@@ -4,4 +4,4 @@ export interface TetrisBlock {
     color: string;
 }
 
-export enum TetrisActionNames{LEFT, RIGHT, DOWN, ROTATE}
+export enum TetrisActionName{LEFT, RIGHT, DOWN, ROTATE}
