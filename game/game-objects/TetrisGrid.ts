@@ -46,6 +46,11 @@ export class TetrisGrid {
         }
     }
 
+    public rotate() {
+        // TODO: collision detection for rotate
+        this.movingShape.rotate();
+    }
+
     private isBlockAtPosition(x:number, y: number): boolean{
         for(let block of this.blocks){
             if(block.xPos === x && block.yPos === y){

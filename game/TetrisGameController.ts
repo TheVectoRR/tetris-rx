@@ -59,6 +59,9 @@ export class TetrisGameController {
                 } else if (value === TetrisAction.RIGHT) {
                     this.tetrisGrid.moveRight();
                     this.redraw();
+                } else if (value === TetrisAction.ROTATE) {
+                    this.tetrisGrid.rotate();
+                    this.redraw();
                 }
             },
             e => console.log(`error: ${e}`),
