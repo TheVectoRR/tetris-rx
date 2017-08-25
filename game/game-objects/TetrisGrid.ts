@@ -17,8 +17,16 @@ export class TetrisGrid {
         return this._blocks;
     }
 
+    public giveBlocks(blocks: TetrisBlock[]){
+        blocks.map(block=>this.blocks.push(block));
+    }
+
     public collisionDetection(blocks: TetrisBlock[]): boolean{
-        return blocks.filter((block) => this.collisionDetected(block)).length === 0
+        return blocks.filter((block) => this.collisionDetected(block) || block.yPos > this.numOfBlocksHigh-1).length === 0
+    }
+
+    public blockCollisionDetection(blocks: TetrisBlock[]): boolean{
+        return blocks.filter(block => this.isBlockAtPosition(block.xPos, block.yPos) || block.yPos > this.numOfBlocksHigh-1).length > 0;
     }
 
     private collisionDetected(block: TetrisBlock): boolean {

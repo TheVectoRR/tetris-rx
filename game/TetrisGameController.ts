@@ -34,7 +34,11 @@ export class TetrisGameController {
 
     private moveDown(): void {
         let cloneShape: TetrisShape = this.movingShape.clone().moveDown();
-        if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
+        if(this.tetrisGrid.blockCollisionDetection(cloneShape.blocks)){
+            this.tetrisGrid.giveBlocks(this.movingShape.blocks);
+            this.movingShape = new LShape(); // TODO: get a new random shape
+        }
+        else if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.moveDown();
         }
     }
