@@ -24,6 +24,7 @@ function initGame(ctx: CanvasRenderingContext2D) {
         ctx, TETRIS_WIDTH / TETRIS_BLOCKS_WIDTH, TETRIS_HEIGHT / TETRIS_BLOCKS_HEIGHT, TETRIS_WIDTH, TETRIS_HEIGHT);
     let gameController: TetrisGameController = new TetrisGameController(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT, tetrisGraphics);
     gameController.observeKeyboard();
+    gameController.observeTimer();
 }
 
 let ctx: CanvasRenderingContext2D = initCanvasElements();

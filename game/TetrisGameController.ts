@@ -4,6 +4,7 @@ import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
 import {TetrisGraphics} from "./TetrisGraphics";
 import {TetrisShape} from "./game-objects/TetrisShape";
 import {LShape} from "./game-objects/LShape";
+import {TimerObserver} from "./game-observers/TimerObserver";
 
 export class TetrisGameController {
 
@@ -54,30 +55,42 @@ export class TetrisGameController {
 
     public observeKeyboard() {
         keyboardObservable.subscribe(
-            (value: TetrisActionName) => {
-                this.tetrisGraphics.clearDraw();
-
-                switch(value){
-                    case TetrisActionName.LEFT:
-                        this.moveLeft();
-                        break;
-                    case TetrisActionName.RIGHT:
-                        this.moveRight();
-                        break;
-                    case TetrisActionName.DOWN:
-                        this.moveDown();
-                        break;
-                    case TetrisActionName.ROTATE:
-                        this.rotate();
-                        break;
-
-                }
-
-                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-                this.tetrisGraphics.drawBlocks(this.movingShape.blocks);
+            (action: TetrisActionName) => {
+                this.performAction(action);
             },
             e => console.log(`error: ${e}`),
             () => console.log('complete')
         );
+    }
+
+    public observeTimer(){
+        TimerObserver.subscribe(
+            (action: TetrisActionName) => {
+                this.performAction(action);
+            }
+        )
+    }
+
+    private performAction(action: TetrisActionName){
+        this.tetrisGraphics.clearDraw();
+
+        switch(action){
+            case TetrisActionName.LEFT:
+                this.moveLeft();
+                break;
+            case TetrisActionName.RIGHT:
+                this.moveRight();
+                break;
+            case TetrisActionName.DOWN:
+                this.moveDown();
+                break;
+            case TetrisActionName.ROTATE:
+                this.rotate();
+                break;
+
+        }
+
+        this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
+        this.tetrisGraphics.drawBlocks(this.movingShape.blocks);
     }
 }
