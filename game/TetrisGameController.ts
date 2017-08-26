@@ -2,9 +2,10 @@ import {TetrisGrid} from "./game-objects/TetrisGrid";
 import {TetrisActionName} from "./game-objects/TetrisModels";
 import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
 import {TetrisGraphics} from "./TetrisGraphics";
-import {TetrisShape} from "./game-objects/TetrisShape";
-import {LShape} from "./game-objects/LShape";
+import {TetrisShape} from "./game-objects/shape-objects/TetrisShape";
+import {LShape} from "./game-objects/shape-objects/LShape";
 import {TimerObserver} from "./game-observers/TimerObserver";
+import {ZShape} from "./game-objects/shape-objects/ZShape";
 
 export class TetrisGameController {
 
@@ -39,7 +40,7 @@ export class TetrisGameController {
             this.tetrisGrid.giveBlocksToGrid(this.movingShape.blocks);
             let numOfFullRows:number[] = this.tetrisGrid.detectFullRows(); // TODO create and update score
             numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
-            this.movingShape = new LShape(); // TODO: get a new random shape
+            this.movingShape = new ZShape(); // TODO: get a new random shape
         }
         else if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.moveDown();
