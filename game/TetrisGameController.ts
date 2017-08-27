@@ -6,6 +6,7 @@ import {TetrisShape} from "./game-objects/shape-objects/TetrisShape";
 import {LShape} from "./game-objects/shape-objects/LShape";
 import {TimerObserver} from "./game-observers/TimerObserver";
 import {ZShape} from "./game-objects/shape-objects/ZShape";
+import {getRandomTetrisShape} from "./game-observers/RandomShapeGeneratorStreamObservable";
 
 export class TetrisGameController {
 
@@ -16,7 +17,7 @@ export class TetrisGameController {
                 readonly numOfBlocksHigh: number,
                 readonly tetrisGraphics: TetrisGraphics) {
         this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
-        this.movingShape = new LShape();
+        this.movingShape = getRandomTetrisShape();
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
     }
 
@@ -40,7 +41,7 @@ export class TetrisGameController {
             this.tetrisGrid.giveBlocksToGrid(this.movingShape.blocks);
             let numOfFullRows:number[] = this.tetrisGrid.detectFullRows(); // TODO create and update score
             numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
-            this.movingShape = new ZShape(); // TODO: get a new random shape
+            this.movingShape = getRandomTetrisShape();
         }
         else if(this.tetrisGrid.collisionDetection(cloneShape.blocks)){
             this.movingShape.moveDown();
