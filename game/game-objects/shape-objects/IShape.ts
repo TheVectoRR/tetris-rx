@@ -25,7 +25,7 @@ export class IShape extends TetrisShape {
     public clone(): TetrisShape{
         let ls: IShape = new IShape();
         ls.rotatePosition = this.rotatePosition;
-        ls.blocks = this.getCloneOfBlocks();
+        ls._blocks= this.getCloneOfBlocks();
         return ls;
     }
 

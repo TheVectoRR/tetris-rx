@@ -4,7 +4,7 @@
   "description": "A tetris game implemented with typescript and rxjs",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --watch --inline"
+    "start": "webpack-dev-server --watch --inline --port 3000"
   },
   "keywords": [
     "tetris",

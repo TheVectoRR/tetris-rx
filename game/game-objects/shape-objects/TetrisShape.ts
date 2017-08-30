@@ -2,26 +2,31 @@ import {TetrisBlock} from "../TetrisModels";
 
 export abstract class TetrisShape {
 
-    blocks: TetrisBlock[] = [];
+    protected _blocks: TetrisBlock[] = [];
 
     public moveRight(): this {
-        this.blocks.map(block => block.xPos += 1);
+        this._blocks.map(block => block.xPos += 1);
         return this;
     }
 
     public moveLeft(): this {
-        this.blocks.map(block => block.xPos -= 1);
+        this._blocks.map(block => block.xPos -= 1);
         return this;
     }
 
     public moveDown(): this {
-        this.blocks.map(block => block.yPos += 1);
+        this._blocks.map(block => block.yPos += 1);
         return this;
+    }
+
+
+    get blocks(): TetrisBlock[] {
+        return this._blocks;
     }
 
     protected getCloneOfBlocks(): TetrisBlock[]{
         let blocks: TetrisBlock[] = [];
-        for(let block of this.blocks){
+        for(let block of this._blocks){
             blocks.push({
                 xPos: block.xPos,
                 yPos: block.yPos,

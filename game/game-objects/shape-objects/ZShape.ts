@@ -25,7 +25,7 @@ export class ZShape extends TetrisShape {
     public clone(): TetrisShape{
         let ls: ZShape = new ZShape();
         ls.rotatePosition = this.rotatePosition;
-        ls.blocks = this.getCloneOfBlocks();
+        ls._blocks = this.getCloneOfBlocks();
         return ls;
     }
 

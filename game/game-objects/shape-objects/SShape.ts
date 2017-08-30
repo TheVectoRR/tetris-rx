@@ -25,7 +25,7 @@ export class SShape extends TetrisShape {
     public clone(): TetrisShape{
         let ls: SShape = new SShape();
         ls.rotatePosition = this.rotatePosition;
-        ls.blocks = this.getCloneOfBlocks();
+        ls._blocks = this.getCloneOfBlocks();
         return ls;
     }
 

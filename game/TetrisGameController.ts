@@ -3,9 +3,7 @@ import {TetrisActionName} from "./game-objects/TetrisModels";
 import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
 import {TetrisGraphics} from "./TetrisGraphics";
 import {TetrisShape} from "./game-objects/shape-objects/TetrisShape";
-import {LShape} from "./game-objects/shape-objects/LShape";
 import {TimerObserver} from "./game-observers/TimerObserver";
-import {ZShape} from "./game-objects/shape-objects/ZShape";
 import {getRandomTetrisShape} from "./game-observers/RandomShapeGeneratorStreamObservable";
 
 export class TetrisGameController {

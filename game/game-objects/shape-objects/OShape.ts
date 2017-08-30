@@ -20,7 +20,7 @@ export class OShape extends TetrisShape {
 
     public clone(): TetrisShape{
         let ls: OShape = new OShape();
-        ls.blocks = this.getCloneOfBlocks();
+        ls._blocks = this.getCloneOfBlocks();
         return ls;
     }
 

@@ -13,4 +13,4 @@ export let TimerObserver:Observable<TetrisActionName> = Observable.create((obser
 
     produceTick();
 
-})
+});
