@@ -9,7 +9,6 @@ const TETRIS_HEIGHT: number = 700;
 
 
 function initCanvasElements(): CanvasRenderingContext2D {
-    let tetrisDivElement: HTMLElement = document.getElementById("tetris-game-div")!;
     let tetrisCanvasDiv: HTMLElement = document.createElement("tetris-gamefield-div");
     tetrisCanvasDiv.innerHTML = `
         <canvas id="${CANVAS_DIV_ID}" width="${TETRIS_WIDTH}" height="${TETRIS_HEIGHT}" style="border:1px solid #000000;">
@@ -19,15 +18,23 @@ function initCanvasElements(): CanvasRenderingContext2D {
     return <CanvasRenderingContext2D>canvas.getContext("2d");
 }
 
-function initGame(ctx: CanvasRenderingContext2D) {
+function initGame(ctx: CanvasRenderingContext2D, tetrisScoreDiv:HTMLElement) {
     let tetrisGraphics: TetrisGraphics = new TetrisCanvasGraphics(
         ctx, TETRIS_WIDTH / TETRIS_BLOCKS_WIDTH, TETRIS_HEIGHT / TETRIS_BLOCKS_HEIGHT, TETRIS_WIDTH, TETRIS_HEIGHT);
-    let gameController: TetrisGameController = new TetrisGameController(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT, tetrisGraphics);
+    let gameController: TetrisGameController = new TetrisGameController(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT, tetrisGraphics, tetrisScoreDiv);
     gameController.observeKeyboard();
     gameController.observeTimer();
 }
 
+function createScoreDiv(): HTMLElement{
+    let tetrisScoreDiv: HTMLElement = document.createElement("tetris-score-div");
+    tetrisDivElement.appendChild(tetrisScoreDiv);
+    return tetrisScoreDiv;
+}
+
+let tetrisDivElement: HTMLElement = document.getElementById("tetris-game-div")!;
 let ctx: CanvasRenderingContext2D = initCanvasElements();
-initGame(ctx);
+let tetrisScoreDiv:HTMLElement = createScoreDiv();
+initGame(ctx, tetrisScoreDiv);
 
 
