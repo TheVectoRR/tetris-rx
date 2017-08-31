@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
-import {TetrisActionName} from "../game-objects/TetrisModels";
+import {TetrisActionName} from "../game-objects/TetrisUtils";
 
 
 export let keyboardObservable:Observable<TetrisActionName|undefined> = Observable.fromEvent(document, "keydown")

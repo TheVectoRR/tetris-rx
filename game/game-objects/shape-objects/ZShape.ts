@@ -1,13 +1,12 @@
 import {TetrisShape} from "./TetrisShape";
+import {TetrisShapeName} from "../TetrisUtils";
 
 const SHAPE_COLOR = 'purple';
 
 export class ZShape extends TetrisShape {
 
-    private rotatePosition: number = 0;
-
     constructor() {
-        super();
+        super(TetrisShapeName.ZSHAPE);
         this.blocks.push(
             {xPos: 5, yPos: -3, color: SHAPE_COLOR},
             {xPos: 5, yPos: -2, color: SHAPE_COLOR},
@@ -20,13 +19,6 @@ export class ZShape extends TetrisShape {
         ZShape.rotateShape(this);
         this.rotatePosition = (this.rotatePosition+1)%2;
         return this;
-    }
-
-    public clone(): TetrisShape{
-        let ls: ZShape = new ZShape();
-        ls.rotatePosition = this.rotatePosition;
-        ls._blocks = this.getCloneOfBlocks();
-        return ls;
     }
 
     private static rotateShape(shape: ZShape): void{

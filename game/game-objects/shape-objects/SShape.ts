@@ -1,13 +1,12 @@
 import {TetrisShape} from "./TetrisShape";
+import {TetrisShapeName} from "../TetrisUtils";
 
 const SHAPE_COLOR = 'green';
 
 export class SShape extends TetrisShape {
 
-    private rotatePosition: number = 0;
-
     constructor() {
-        super();
+        super(TetrisShapeName.SSHAPE);
         this.blocks.push(
             {xPos: 4, yPos: -3, color: SHAPE_COLOR},
             {xPos: 4, yPos: -2, color: SHAPE_COLOR},
@@ -20,13 +19,6 @@ export class SShape extends TetrisShape {
         SShape.rotateShape(this);
         this.rotatePosition = (this.rotatePosition+1)%2;
         return this;
-    }
-
-    public clone(): TetrisShape{
-        let ls: SShape = new SShape();
-        ls.rotatePosition = this.rotatePosition;
-        ls._blocks = this.getCloneOfBlocks();
-        return ls;
     }
 
     private static rotateShape(shape: SShape): void{

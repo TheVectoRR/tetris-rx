@@ -1,5 +1,5 @@
 import {TetrisGrid} from "./game-objects/TetrisGrid";
-import {TetrisActionName} from "./game-objects/TetrisModels";
+import {TetrisActionName} from "./game-objects/TetrisUtils";
 import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
 import {TetrisGraphics} from "./TetrisGraphics";
 import {TetrisShape} from "./game-objects/shape-objects/TetrisShape";

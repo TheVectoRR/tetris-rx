@@ -1,4 +1,4 @@
-import {TetrisBlock} from "./TetrisModels";
+import {TetrisBlock} from "./TetrisUtils";
 export class TetrisGrid {
 
     private blocksMap: Map<number, TetrisBlock[]> = new Map<number, TetrisBlock[]>();
