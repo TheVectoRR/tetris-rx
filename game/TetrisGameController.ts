@@ -3,8 +3,9 @@ import { TetrisActionName } from "./game-objects/TetrisUtils";
 import { keyboardObservable$ } from "./game-observers/KeyboardEventObserver";
 import { TetrisGraphics } from "./TetrisGraphics";
 import { TetrisShape } from "./game-objects/shape-objects/TetrisShape";
-import { TimerObserver } from "./game-observers/TimerObserver";
 import { getRandomTetrisShape } from "./game-observers/RandomShapeGeneratorStreamObservable";
+import { Observable } from  "rxjs/Observable";
+import 'rxjs/add/observable/interval';
 
 export class TetrisGameController {
 
@@ -21,6 +22,22 @@ export class TetrisGameController {
         this.movingShape = getRandomTetrisShape();
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
         this.updateScore();
+    }
+
+    public startGame() {
+        keyboardObservable$.subscribe(
+            (action: TetrisActionName) => {
+                this.performAction(action);
+            }
+        );
+
+        Observable.interval(200)
+            .map(() => TetrisActionName.DOWN)
+            .subscribe(
+            (action: TetrisActionName) => {
+                this.performAction(action);
+            }
+        )
     }
 
     private moveRight(): void {
@@ -56,22 +73,6 @@ export class TetrisGameController {
         if (this.tetrisGrid.collisionDetection(cloneShape.blocks)) {
             this.movingShape.rotate();
         }
-    }
-
-    public observeKeyboard() {
-        keyboardObservable$.subscribe(
-            (action: TetrisActionName) => {
-                this.performAction(action);
-            }
-        );
-    }
-
-    public observeTimer() {
-        TimerObserver.subscribe(
-            (action: TetrisActionName) => {
-                this.performAction(action);
-            }
-        )
     }
 
     private performAction(action: TetrisActionName) {
