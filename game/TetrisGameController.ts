@@ -1,10 +1,10 @@
-import {TetrisGrid} from "./game-objects/TetrisGrid";
-import {TetrisActionName} from "./game-objects/TetrisUtils";
-import {keyboardObservable} from "./game-observers/KeyboardEventObserver";
-import {TetrisGraphics} from "./TetrisGraphics";
-import {TetrisShape} from "./game-objects/shape-objects/TetrisShape";
-import {TimerObserver} from "./game-observers/TimerObserver";
-import {getRandomTetrisShape} from "./game-observers/RandomShapeGeneratorStreamObservable";
+import { TetrisGrid } from "./game-objects/TetrisGrid";
+import { TetrisActionName } from "./game-objects/TetrisUtils";
+import { keyboardObservable$ } from "./game-observers/KeyboardEventObserver";
+import { TetrisGraphics } from "./TetrisGraphics";
+import { TetrisShape } from "./game-objects/shape-objects/TetrisShape";
+import { TimerObserver } from "./game-observers/TimerObserver";
+import { getRandomTetrisShape } from "./game-observers/RandomShapeGeneratorStreamObservable";
 
 export class TetrisGameController {
 
@@ -59,7 +59,7 @@ export class TetrisGameController {
     }
 
     public observeKeyboard() {
-        keyboardObservable.subscribe(
+        keyboardObservable$.subscribe(
             (action: TetrisActionName) => {
                 this.performAction(action);
             }

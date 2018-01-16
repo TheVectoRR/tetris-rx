@@ -1,11 +1,12 @@
-import {getTetrisShape, TetrisBlock, TetrisShapeName} from "../TetrisUtils";
+import { getTetrisShape, TetrisBlock, TetrisShapeName } from "../TetrisUtils";
 
 export abstract class TetrisShape {
 
     protected _blocks: TetrisBlock[] = [];
     protected rotatePosition: number = 0;
 
-    constructor(readonly tetrisShapeName: TetrisShapeName){}
+    constructor(readonly tetrisShapeName: TetrisShapeName) {
+    }
 
     get blocks(): TetrisBlock[] {
         return this._blocks;
@@ -26,16 +27,16 @@ export abstract class TetrisShape {
         return this;
     }
 
-    public clone(): TetrisShape{
+    public clone(): TetrisShape {
         let shape: TetrisShape = getTetrisShape(this.tetrisShapeName)!;
         shape.rotatePosition = this.rotatePosition;
         shape._blocks = this.getCloneOfBlocks();
         return shape;
     }
 
-    protected getCloneOfBlocks(): TetrisBlock[]{
+    protected getCloneOfBlocks(): TetrisBlock[] {
         let blocks: TetrisBlock[] = [];
-        for(let block of this._blocks){
+        for (let block of this._blocks) {
             blocks.push({
                 xPos: block.xPos,
                 yPos: block.yPos,

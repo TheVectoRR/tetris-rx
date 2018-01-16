@@ -1,11 +1,12 @@
-import {TetrisBlock} from "./game-objects/TetrisUtils";
+import { TetrisBlock } from "./game-objects/TetrisUtils";
 
-export interface TetrisGraphics{
-    drawBlocks(blocks:TetrisBlock[]):void;
-    clearDraw():void;
+export interface TetrisGraphics {
+    drawBlocks(blocks: TetrisBlock[]): void;
+
+    clearDraw(): void;
 }
 
-export class TetrisCanvasGraphics implements TetrisGraphics{
+export class TetrisCanvasGraphics implements TetrisGraphics {
 
     constructor(private ctx: CanvasRenderingContext2D,
                 private pixelWidth: number,
@@ -20,7 +21,7 @@ export class TetrisCanvasGraphics implements TetrisGraphics{
         }
     }
 
-    public clearDraw(){
+    public clearDraw() {
         this.ctx.clearRect(0, 0, this.playFieldWidth, this.playFieldHeigth);
     }
 
