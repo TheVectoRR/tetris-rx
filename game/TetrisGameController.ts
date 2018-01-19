@@ -1,16 +1,18 @@
 import { TetrisGrid } from "./game-objects/TetrisGrid";
-import { TetrisActionName } from "./game-objects/TetrisUtils";
+import { moveDown, moveLeft, moveRight, TetrisActionName, TetrisBlock } from "./game-objects/TetrisUtils";
 import { keyboardObservable$ } from "./game-observers/KeyboardEventObserver";
 import { TetrisGraphics } from "./TetrisGraphics";
 import { TetrisShape } from "./game-objects/shape-objects/TetrisShape";
-import { getRandomTetrisShape } from "./game-observers/RandomShapeGeneratorStreamObservable";
+import { getRandomTetrisShape$ } from "./game-observers/RandomShapeGeneratorStreamObservable";
 import { Observable } from  "rxjs/Observable";
+import { combineLatest, filter, mergeMap, map, startWith } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
+import 'rxjs/Operators/first';
 
 export class TetrisGameController {
 
     private tetrisGrid: TetrisGrid;
-    private movingShape: TetrisShape;
+    private movingShape$: Observable<TetrisShape>;
     private score: number = 0;
     private numberOfRowsScored: number = 0;
 
@@ -19,7 +21,7 @@ export class TetrisGameController {
                 readonly tetrisGraphics: TetrisGraphics,
                 private tetrisScoreDiv: HTMLElement) {
         this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
-        this.movingShape = getRandomTetrisShape();
+        this.movingShape$ = getRandomTetrisShape$();
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
         this.updateScore();
     }
@@ -40,62 +42,75 @@ export class TetrisGameController {
         )
     }
 
-    private moveRight(): void {
-        let cloneShape: TetrisShape = this.movingShape.clone().moveRight();
-        if (this.tetrisGrid.collisionDetection(cloneShape.blocks)) {
-            this.movingShape.moveRight();
-        }
+    private performMove(move: (b:TetrisBlock) => (void)): Observable<boolean> {
+        return this.movingShape$.pipe(
+            mergeMap(( shape ) => shape.clone$),
+            mergeMap(( clonedShape ) => clonedShape.performMove$(move)),
+            mergeMap(( clonedShape ) => clonedShape.blocks$),
+            filter(( blocks ) => this.tetrisGrid.noCollisionDetected(blocks)),
+            combineLatest(this.movingShape$),
+            mergeMap(( [ blocks, shape ] ) => shape.performMove$(move)),
+            map(() => true)
+        );
     }
 
-    private moveLeft(): void {
-        let cloneShape: TetrisShape = this.movingShape.clone().moveLeft();
-        if (this.tetrisGrid.collisionDetection(cloneShape.blocks)) {
-            this.movingShape.moveLeft();
-        }
+    // private moveDown(): Observable<boolean> {
+    //     let cloneShape: TetrisShape = this.movingShape.clone().moveDown();
+    //     if (this.tetrisGrid.blockCollisionDetection(cloneShape.blocks)) {
+    //         this.tetrisGrid.giveBlocksToGrid(this.movingShape.blocks);
+    //         let numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
+    //         this.updateScore(numOfFullRows);
+    //         numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
+    //         this.movingShape = getRandomTetrisShape();
+    //     }
+    //     else if (this.tetrisGrid.collisionDetection(cloneShape.blocks)) {
+    //         this.movingShape.moveDown();
+    //     }
+    // }
+
+    private rotate(): Observable<boolean> {
+        return this.movingShape$.pipe(
+            mergeMap(( shape ) => shape.clone$),
+            mergeMap(( clonedShape ) => clonedShape.rotate$),
+            mergeMap(( clonedShape ) => clonedShape.blocks$),
+            filter(( blocks ) => this.tetrisGrid.noCollisionDetected(blocks)),
+            combineLatest(this.movingShape$),
+            mergeMap(( [ blocks, shape ] ) => shape.rotate$),
+            map(() => true)
+        );
     }
 
-    private moveDown(): void {
-        let cloneShape: TetrisShape = this.movingShape.clone().moveDown();
-        if (this.tetrisGrid.blockCollisionDetection(cloneShape.blocks)) {
-            this.tetrisGrid.giveBlocksToGrid(this.movingShape.blocks);
-            let numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
-            this.updateScore(numOfFullRows);
-            numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
-            this.movingShape = getRandomTetrisShape();
-        }
-        else if (this.tetrisGrid.collisionDetection(cloneShape.blocks)) {
-            this.movingShape.moveDown();
-        }
-    }
-
-    private rotate() {
-        let cloneShape: TetrisShape = this.movingShape.clone().rotate();
-        if (this.tetrisGrid.collisionDetection(cloneShape.blocks)) {
-            this.movingShape.rotate();
-        }
-    }
-
+    // TODO: probably still need to subscribe to the action method
     private performAction(action: TetrisActionName) {
+
+        let moveDone$ = Observable.of(true);
+
         this.tetrisGraphics.clearDraw();
 
         switch (action) {
             case TetrisActionName.LEFT:
-                this.moveLeft();
+                moveDone$ = this.performMove(moveLeft);
                 break;
             case TetrisActionName.RIGHT:
-                this.moveRight();
+                moveDone$ = this.performMove(moveRight);
                 break;
             case TetrisActionName.DOWN:
-                this.moveDown();
+                moveDone$ = this.performMove(moveDown).pipe(
+                    filter((moveCompleted) => moveCompleted),
+                    // TODO
+                );
                 break;
             case TetrisActionName.ROTATE:
-                this.rotate();
+                moveDone$ = this.rotate();
                 break;
-
         }
 
+        moveDone$.subscribe((move) => console.log(move));
+
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-        this.tetrisGraphics.drawBlocks(this.movingShape.blocks);
+        this.movingShape$.pipe(
+            mergeMap((shape) => shape.blocks$)
+        ).subscribe((blocks) => this.tetrisGraphics.drawBlocks(blocks));
     }
 
     private updateScore(linesCompleted: number[] = []) {

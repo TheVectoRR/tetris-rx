@@ -25,12 +25,18 @@ export class TetrisGrid {
         });
     }
 
-    public collisionDetection(blocks: TetrisBlock[]): boolean {
-        return blocks.filter((block) => this.collisionDetected(block) || block.yPos > this.numOfBlocksHigh - 1).length === 0
+    // TODO: Better method name
+    public noCollisionDetected(blocks: TetrisBlock[]): boolean {
+        return blocks
+            .filter((block) => this.collisionDetected(block) || block.yPos > this.numOfBlocksHigh - 1)
+            .length === 0
     }
 
+    // TODO: Better method name
     public blockCollisionDetection(blocks: TetrisBlock[]): boolean {
-        return blocks.filter(block => block.yPos > this.numOfBlocksHigh - 1 || this.isBlockAtPosition(block.xPos, block.yPos)).length > 0;
+        return blocks
+            .filter(block => block.yPos > this.numOfBlocksHigh - 1 || this.isBlockAtPosition(block.xPos, block.yPos))
+            .length > 0;
     }
 
     public detectFullRows(): number[] {

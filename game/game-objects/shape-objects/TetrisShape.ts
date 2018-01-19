@@ -1,4 +1,8 @@
-import { getTetrisShape, TetrisBlock, TetrisShapeName } from "../TetrisUtils";
+import { getTetrisShape$, TetrisBlock, TetrisShapeName } from "../TetrisUtils";
+import { Observable } from 'rxjs/Observable';
+import { map, combineLatest } from 'rxjs/operators';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/do';
 
 export abstract class TetrisShape {
 
@@ -8,33 +12,29 @@ export abstract class TetrisShape {
     constructor(readonly tetrisShapeName: TetrisShapeName) {
     }
 
-    get blocks(): TetrisBlock[] {
-        return this._blocks;
+    public get blocks$(): Observable<TetrisBlock[]> {
+        return Observable.of(this._blocks);
     }
 
-    public moveRight(): this {
-        this._blocks.map(block => block.xPos += 1);
-        return this;
+    public performMove$(move: (b:TetrisBlock) => (void)): Observable<TetrisShape> {
+        this._blocks.map(block => move(block));
+        return Observable.of(this);
     }
 
-    public moveLeft(): this {
-        this._blocks.map(block => block.xPos -= 1);
-        return this;
+    public get clone$(): Observable<TetrisShape> {
+        return getTetrisShape$(this.tetrisShapeName).
+            do((shape) => shape.rotatePosition = this.rotatePosition).pipe(
+                combineLatest(this.cloneOfBlocks$),
+                map(([shape, clonedBlocks]) => {
+                    if (shape) {
+                        shape._blocks = clonedBlocks
+                    }
+                    return shape;
+                })
+        );
     }
 
-    public moveDown(): this {
-        this._blocks.map(block => block.yPos += 1);
-        return this;
-    }
-
-    public clone(): TetrisShape {
-        let shape: TetrisShape = getTetrisShape(this.tetrisShapeName)!;
-        shape.rotatePosition = this.rotatePosition;
-        shape._blocks = this.getCloneOfBlocks();
-        return shape;
-    }
-
-    protected getCloneOfBlocks(): TetrisBlock[] {
+    protected get cloneOfBlocks$(): Observable<TetrisBlock[]> {
         let blocks: TetrisBlock[] = [];
         for (let block of this._blocks) {
             blocks.push({
@@ -43,8 +43,8 @@ export abstract class TetrisShape {
                 color: block.color
             });
         }
-        return blocks;
+        return Observable.of(blocks);
     }
 
-    public abstract rotate(): this;
+    public abstract get rotate$(): Observable<this>;
 }
