@@ -25,15 +25,13 @@ export class TetrisGrid {
         });
     }
 
-    // TODO: Better method name
-    public noCollisionDetected(blocks: TetrisBlock[]): boolean {
+    public collisionDetection(blocks: TetrisBlock[]): boolean {
         return blocks
             .filter((block) => this.collisionDetected(block) || block.yPos > this.numOfBlocksHigh - 1)
-            .length === 0
+            .length > 0
     }
 
-    // TODO: Better method name
-    public blockCollisionDetection(blocks: TetrisBlock[]): boolean {
+    public noBlockCollisionDetection(blocks: TetrisBlock[]): boolean {
         return blocks
             .filter(block => block.yPos > this.numOfBlocksHigh - 1 || this.isBlockAtPosition(block.xPos, block.yPos))
             .length > 0;

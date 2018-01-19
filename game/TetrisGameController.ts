@@ -1,13 +1,12 @@
 import { TetrisGrid } from './game-objects/TetrisGrid';
-import { moveDown, moveLeft, moveRight, TetrisActionName, TetrisBlock } from './game-objects/TetrisUtils';
+import { TetrisActionName } from './game-objects/TetrisUtils';
 import { keyboardObservable$ } from './game-observers/KeyboardEventObserver';
 import { TetrisGraphics } from './TetrisGraphics';
 import { TetrisShape } from './game-objects/shape-objects/TetrisShape';
 import { getRandomTetrisShape$ } from './game-observers/RandomShapeGeneratorStreamObservable';
 import { Observable } from  'rxjs/Observable';
-import { combineLatest, filter, mergeMap, map, startWith } from 'rxjs/operators';
+import { combineLatest, tap} from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
-import 'rxjs/Operators/first';
 
 export class TetrisGameController {
 
@@ -27,31 +26,34 @@ export class TetrisGameController {
     }
 
     public startGame() {
-        keyboardObservable$.subscribe(
-            (action: TetrisActionName) => {
-                this.performAction(action);
+        keyboardObservable$.pipe(
+            combineLatest(this.movingShape$),
+            tap(([action, shape]) => this.performAction(shape, action))
+        ).subscribe(
+            ([, shape]) =>  {
+                this.tetrisGraphics.clearDraw();
+                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
+                this.tetrisGraphics.drawBlocks(shape.blocks);
             }
         );
 
-        Observable.interval(200)
-            .map(() => TetrisActionName.DOWN)
-            .subscribe(
-            (action: TetrisActionName) => {
-                this.performAction(action);
+        Observable.interval(200).pipe(
+            combineLatest(this.movingShape$),
+            tap(([, shape]) => this.performAction(shape, TetrisActionName.DOWN))
+        ).subscribe(
+            ([, shape]) =>  {
+                this.tetrisGraphics.clearDraw();
+                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
+                this.tetrisGraphics.drawBlocks(shape.blocks);
             }
-        )
+        );
+
     }
 
-    private performMove(move: (b:TetrisBlock) => (void)): Observable<boolean> {
-        return this.movingShape$.pipe(
-            mergeMap(( shape ) => shape.clone$),
-            mergeMap(( clonedShape ) => clonedShape.performMove$(move)),
-            mergeMap(( clonedShape ) => clonedShape.blocks$),
-            filter(( blocks ) => this.tetrisGrid.noCollisionDetected(blocks)),
-            combineLatest(this.movingShape$),
-            mergeMap(( [ blocks, shape ] ) => shape.performMove$(move)),
-            map(() => true)
-        );
+    private collisionDetected(shape: TetrisShape, move: (shape:TetrisShape) => (void)): boolean {
+        let clonedShape: TetrisShape = shape.clone;
+        clonedShape.performMove(move);
+        return this.tetrisGrid.collisionDetection(clonedShape.blocks);
     }
 
     // private moveDown(): Observable<boolean> {
@@ -68,48 +70,42 @@ export class TetrisGameController {
     //     }
     // }
 
-    private rotate(): Observable<boolean> {
-        return this.movingShape$.pipe(
-            mergeMap(( shape ) => shape.clone$),
-            mergeMap(( clonedShape ) => clonedShape.rotate$),
-            mergeMap(( clonedShape ) => clonedShape.blocks$),
-            filter(( blocks ) => this.tetrisGrid.noCollisionDetected(blocks)),
-            combineLatest(this.movingShape$),
-            mergeMap(( [ blocks, shape ] ) => shape.rotate$),
-            map(() => true)
-        );
-    }
+    // private rotate(): Observable<boolean> {
+    //     return this.movingShape$.pipe(
+    //         mergeMap(( shape ) => shape.clone$),
+    //         mergeMap(( clonedShape ) => clonedShape.rotate$),
+    //         mergeMap(( clonedShape ) => clonedShape.blocks$),
+    //         filter(( blocks ) => this.tetrisGrid.noCollisionDetected(blocks)),
+    //         combineLatest(this.movingShape$),
+    //         mergeMap(( [ blocks, shape ] ) => shape.rotate$),
+    //         map(() => true)
+    //     );
+    // }
 
-    private performAction(action: TetrisActionName) {
-
-        let moveDone$ = Observable.of(true);
-
-        this.tetrisGraphics.clearDraw();
+    private performAction(shape: TetrisShape, action: TetrisActionName) {
 
         switch (action) {
             case TetrisActionName.LEFT:
-                moveDone$ = this.performMove(moveLeft);
+                if(!this.collisionDetected(shape, TetrisShape.moveLeft)){
+                    shape.performMove(TetrisShape.moveLeft);
+                }
                 break;
             case TetrisActionName.RIGHT:
-                moveDone$ = this.performMove(moveRight);
+                if(!this.collisionDetected(shape, TetrisShape.moveRight)){
+                    shape.performMove(TetrisShape.moveRight);
+                }
                 break;
             case TetrisActionName.DOWN:
-                moveDone$ = this.performMove(moveDown).pipe(
-                    filter((moveCompleted) => moveCompleted),
-                    // TODO
-                );
+                if(!this.collisionDetected(shape, TetrisShape.moveDown)){
+                    shape.performMove(TetrisShape.moveDown);
+                }
                 break;
             case TetrisActionName.ROTATE:
-                moveDone$ = this.rotate();
-                break;
+                if(!this.collisionDetected(shape, shape.rotate)){
+                    shape.performMove(shape.rotate);
+                }
         }
 
-        moveDone$.subscribe((move) => console.log(move));
-
-        this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-        this.movingShape$.pipe(
-            mergeMap((shape) => shape.blocks$)
-        ).subscribe((blocks) => this.tetrisGraphics.drawBlocks(blocks));
     }
 
     private updateScore(linesCompleted: number[] = []) {

@@ -6,7 +6,6 @@ import { OShape } from './shape-objects/OShape';
 import { SShape } from './shape-objects/SShape';
 import { TShape } from './shape-objects/TShape';
 import { ZShape } from './shape-objects/ZShape';
-import { Observable } from 'rxjs/Observable';
 
 export interface TetrisBlock {
     xPos: number;
@@ -18,37 +17,25 @@ export enum TetrisActionName{ LEFT, RIGHT, DOWN, ROTATE, EMPTY }
 
 export enum TetrisShapeName{ NUMBER_OF_SHAPES = 7, ISHAPE= 0, JSHAPE =1, LSHAPE=2, OSHAPE=3, SSHAPE=4, TSHAPE=5, ZSHAPE=6 }
 
-export function getTetrisShape$(index: TetrisShapeName): Observable<TetrisShape>{
+export function getTetrisShape(index: TetrisShapeName): TetrisShape {
     switch(index){
         case TetrisShapeName.ISHAPE:
-            return Observable.of(new IShape());
+            return new IShape();
         case TetrisShapeName.JSHAPE:
-            return Observable.of(new JShape());
+            return new JShape();
         case TetrisShapeName.LSHAPE:
-            return Observable.of(new LShape());
+            return new LShape();
         case TetrisShapeName.OSHAPE:
-            return Observable.of(new OShape());
+            return new OShape();
         case TetrisShapeName.SSHAPE:
-            return Observable.of(new SShape());
+            return new SShape();
         case TetrisShapeName.TSHAPE:
-            return Observable.of(new TShape());
+            return new TShape();
         case TetrisShapeName.ZSHAPE:
-            return Observable.of(new ZShape());
+            return new ZShape();
         default:
             console.error('undefined tetris shape');
-            return Observable.of(new OShape());
+            return new OShape();
 
     }
-}
-
-export function moveRight(block: TetrisBlock): void{
-    block.xPos += 1
-}
-
-export function moveLeft(block: TetrisBlock): void{
-    block.xPos -= 1
-}
-
-export function moveDown(block: TetrisBlock): void{
-    block.yPos += 1
 }

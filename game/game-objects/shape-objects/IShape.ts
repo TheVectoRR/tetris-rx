@@ -1,6 +1,5 @@
 import { TetrisShape } from './TetrisShape';
 import { TetrisShapeName } from '../TetrisUtils';
-import { Observable } from 'rxjs/Observable';
 
 const SHAPE_COLOR = 'cyan';
 
@@ -16,35 +15,34 @@ export class IShape extends TetrisShape {
         )
     }
 
-    public get rotate$(): Observable<this>  {
-        IShape.rotateShape(this);
-        this.rotatePosition = (this.rotatePosition + 1) % 2;
-        return Observable.of(this);
+    public rotate(shape: TetrisShape): void {
+        IShape.rotateShape(shape);
+        shape.rotatePosition = (shape.rotatePosition + 1) % 2;
+
     }
 
-    private static rotateShape(shape: IShape): void {
+    private static rotateShape(shape: TetrisShape) {
         switch (shape.rotatePosition) {
             case 0:
-                shape._blocks[ 0 ].xPos -= 2;
-                shape._blocks[ 0 ].yPos += 2;
+                shape.blocks[ 0 ].xPos -= 2;
+                shape.blocks[ 0 ].yPos += 2;
 
-                shape._blocks[ 1 ].xPos -= 1;
-                shape._blocks[ 1 ].yPos += 1;
+                shape.blocks[ 1 ].xPos -= 1;
+                shape.blocks[ 1 ].yPos += 1;
 
-                shape._blocks[ 3 ].xPos += 1;
-                shape._blocks[ 3 ].yPos -= 1;
+                shape.blocks[ 3 ].xPos += 1;
+                shape.blocks[ 3 ].yPos -= 1;
                 break;
             case 1:
-                shape._blocks[ 0 ].xPos += 2;
-                shape._blocks[ 0 ].yPos -= 2;
+                shape.blocks[ 0 ].xPos += 2;
+                shape.blocks[ 0 ].yPos -= 2;
 
-                shape._blocks[ 1 ].xPos += 1;
-                shape._blocks[ 1 ].yPos -= 1;
+                shape.blocks[ 1 ].xPos += 1;
+                shape.blocks[ 1 ].yPos -= 1;
 
-                shape._blocks[ 3 ].xPos -= 1;
-                shape._blocks[ 3 ].yPos += 1;
+                shape.blocks[ 3 ].xPos -= 1;
+                shape.blocks[ 3 ].yPos += 1;
                 break;
         }
     }
-
 }

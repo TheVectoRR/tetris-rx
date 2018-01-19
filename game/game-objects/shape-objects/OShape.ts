@@ -1,6 +1,5 @@
 import { TetrisShape } from './TetrisShape';
-import { TetrisShapeName } from '../TetrisUtils';
-import { Observable } from 'rxjs/Observable';
+import { TetrisBlock, TetrisShapeName } from '../TetrisUtils';
 
 const SHAPE_COLOR = 'yellow';
 
@@ -16,8 +15,8 @@ export class OShape extends TetrisShape {
         )
     }
 
-    public get rotate$(): Observable<this> {
-        return Observable.of(this);
+    public rotate(shape: TetrisShape): void {
+
     }
 
 }
