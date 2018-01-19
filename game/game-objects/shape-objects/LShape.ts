@@ -1,5 +1,5 @@
-import { TetrisShape } from "./TetrisShape";
-import { TetrisShapeName } from "../TetrisUtils";
+import { TetrisShape } from './TetrisShape';
+import { TetrisShapeName } from '../TetrisUtils';
 import { Observable } from 'rxjs/Observable';
 
 const SHAPE_COLOR = 'orange';

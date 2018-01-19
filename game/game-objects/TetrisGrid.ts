@@ -1,4 +1,4 @@
-import { TetrisBlock } from "./TetrisUtils";
+import { TetrisBlock } from './TetrisUtils';
 
 export class TetrisGrid {
 

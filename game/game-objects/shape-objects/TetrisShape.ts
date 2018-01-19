@@ -1,4 +1,4 @@
-import { getTetrisShape$, TetrisBlock, TetrisShapeName } from "../TetrisUtils";
+import { getTetrisShape$, TetrisBlock, TetrisShapeName } from '../TetrisUtils';
 import { Observable } from 'rxjs/Observable';
 import { map, combineLatest } from 'rxjs/operators';
 import 'rxjs/add/observable/of';

@@ -1,10 +1,10 @@
-import { TetrisGrid } from "./game-objects/TetrisGrid";
-import { moveDown, moveLeft, moveRight, TetrisActionName, TetrisBlock } from "./game-objects/TetrisUtils";
-import { keyboardObservable$ } from "./game-observers/KeyboardEventObserver";
-import { TetrisGraphics } from "./TetrisGraphics";
-import { TetrisShape } from "./game-objects/shape-objects/TetrisShape";
-import { getRandomTetrisShape$ } from "./game-observers/RandomShapeGeneratorStreamObservable";
-import { Observable } from  "rxjs/Observable";
+import { TetrisGrid } from './game-objects/TetrisGrid';
+import { moveDown, moveLeft, moveRight, TetrisActionName, TetrisBlock } from './game-objects/TetrisUtils';
+import { keyboardObservable$ } from './game-observers/KeyboardEventObserver';
+import { TetrisGraphics } from './TetrisGraphics';
+import { TetrisShape } from './game-objects/shape-objects/TetrisShape';
+import { getRandomTetrisShape$ } from './game-observers/RandomShapeGeneratorStreamObservable';
+import { Observable } from  'rxjs/Observable';
 import { combineLatest, filter, mergeMap, map, startWith } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import 'rxjs/Operators/first';
@@ -80,7 +80,6 @@ export class TetrisGameController {
         );
     }
 
-    // TODO: probably still need to subscribe to the action method
     private performAction(action: TetrisActionName) {
 
         let moveDone$ = Observable.of(true);
