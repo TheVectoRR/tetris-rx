@@ -22,7 +22,7 @@ function initGame(ctx: CanvasRenderingContext2D, tetrisScoreDiv:HTMLElement) {
     let tetrisGraphics: TetrisGraphics = new TetrisCanvasGraphics(
         ctx, TETRIS_WIDTH / TETRIS_BLOCKS_WIDTH, TETRIS_HEIGHT / TETRIS_BLOCKS_HEIGHT, TETRIS_WIDTH, TETRIS_HEIGHT);
     let gameController: TetrisGameController = new TetrisGameController(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT, tetrisGraphics, tetrisScoreDiv);
-    gameController.startGame();
+    gameController.gameLoop();
 }
 
 function createScoreDiv(): HTMLElement{
