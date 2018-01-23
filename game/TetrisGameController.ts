@@ -5,15 +5,16 @@ import { TetrisGraphics } from './TetrisGraphics';
 import { TetrisShape } from './game-objects/shape-objects/TetrisShape';
 import { getRandomTetrisShape } from './game-observers/RandomShapeGeneratorObservable';
 import { Observable } from 'rxjs/Observable';
-import { tap } from 'rxjs/operators';
+import { combineLatest, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
+import { Subject } from 'rxjs/Subject';
 
 export class TetrisGameController {
 
     private tetrisGrid: TetrisGrid;
     private score: number = 0;
     private numberOfRowsScored: number = 0;
-    private tetrisShape: TetrisShape;
+    private tetrisShapeSubject$: Subject<TetrisShape> = new Subject();
 
     constructor(readonly numOfBlocksWide: number,
                 readonly numOfBlocksHigh: number,
@@ -26,27 +27,31 @@ export class TetrisGameController {
 
     public gameLoop() {
 
-        this.tetrisShape = getRandomTetrisShape();
+
 
         keyboardObservable$.pipe(
-            tap((action) => this.performAction(this.tetrisShape, action))
+            combineLatest(this.tetrisShapeSubject$),
+            tap(([action, shape]) => this.performAction(shape, action)),
         ).subscribe(
-            () => {
+            ([, shape]) =>  {
                 this.tetrisGraphics.clearDraw();
                 this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-                this.tetrisGraphics.drawBlocks(this.tetrisShape.blocks);
+                this.tetrisGraphics.drawBlocks(shape.blocks);
             }
         );
 
-        Observable.interval(300).pipe(
-            tap((shape) => this.performAction(this.tetrisShape, TetrisActionName.DOWN))
+        Observable.interval(200).pipe(
+            combineLatest(this.tetrisShapeSubject$),
+            tap(([, shape]) => this.performAction(shape, TetrisActionName.DOWN)),
         ).subscribe(
-            () => {
+            ([, shape]) =>  {
                 this.tetrisGraphics.clearDraw();
                 this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-                this.tetrisGraphics.drawBlocks(this.tetrisShape.blocks);
+                this.tetrisGraphics.drawBlocks(shape.blocks);
             }
         );
+
+        this.tetrisShapeSubject$.next(getRandomTetrisShape());
 
     }
 
@@ -77,7 +82,7 @@ export class TetrisGameController {
                     let numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
                     this.updateScore(numOfFullRows);
                     numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
-                    this.tetrisShape = getRandomTetrisShape();
+                    this.tetrisShapeSubject$.next(getRandomTetrisShape());
                 }
                 break;
             case TetrisActionName.ROTATE:
