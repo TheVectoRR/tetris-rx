@@ -5,7 +5,7 @@ import { TetrisGraphics } from './TetrisGraphics';
 import { TetrisShape } from './game-objects/shape-objects/TetrisShape';
 import { getRandomTetrisShape } from './game-observers/RandomShapeGeneratorObservable';
 import { Observable } from 'rxjs/Observable';
-import { combineLatest, tap } from 'rxjs/operators';
+import { combineLatest, map, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 
@@ -27,29 +27,25 @@ export class TetrisGameController {
 
     public gameLoop() {
 
-
+        const drawGraphicsObserver = {
+            next: (shape: TetrisShape) => {
+                this.tetrisGraphics.clearDraw();
+                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
+                this.tetrisGraphics.drawBlocks(shape.blocks);
+            }
+        };
 
         keyboardObservable$.pipe(
             combineLatest(this.tetrisShapeSubject$),
-            tap(([action, shape]) => this.performAction(shape, action)),
-        ).subscribe(
-            ([, shape]) =>  {
-                this.tetrisGraphics.clearDraw();
-                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-                this.tetrisGraphics.drawBlocks(shape.blocks);
-            }
-        );
+            tap(([ action, shape ]) => this.performAction(shape, action)),
+            map(([ , shape ]) => shape)
+        ).subscribe(drawGraphicsObserver);
 
         Observable.interval(200).pipe(
             combineLatest(this.tetrisShapeSubject$),
-            tap(([, shape]) => this.performAction(shape, TetrisActionName.DOWN)),
-        ).subscribe(
-            ([, shape]) =>  {
-                this.tetrisGraphics.clearDraw();
-                this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-                this.tetrisGraphics.drawBlocks(shape.blocks);
-            }
-        );
+            tap(([ , shape ]) => this.performAction(shape, TetrisActionName.DOWN)),
+            map(([ , shape ]) => shape)
+        ).subscribe(drawGraphicsObserver);
 
         this.tetrisShapeSubject$.next(getRandomTetrisShape());
 
