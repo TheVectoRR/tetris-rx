@@ -31,12 +31,6 @@ export class TetrisGrid {
             .length > 0
     }
 
-    public noBlockCollisionDetection(blocks: TetrisBlock[]): boolean {
-        return blocks
-            .filter(block => block.yPos > this.numOfBlocksHigh - 1 || this.isBlockAtPosition(block.xPos, block.yPos))
-            .length > 0;
-    }
-
     public detectFullRows(): number[] {
         let rowNumbersWhoAreFull: number[] = [];
         for (let i = 0; i < this.numOfBlocksHigh; i++) {
@@ -55,6 +49,10 @@ export class TetrisGrid {
             }
         }
         this.blocksMap.set(0, []);
+    }
+
+    public isEndGame(blocks: TetrisBlock[]): boolean {
+        return blocks.some((block) => block.yPos < 0);
     }
 
     private collisionDetected(block: TetrisBlock): boolean {

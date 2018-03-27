@@ -8,17 +8,19 @@ import { Observable } from 'rxjs/Observable';
 import { combineLatest, map, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 export class TetrisGameController {
 
     private tetrisGrid: TetrisGrid;
     private score: number = 0;
     private numberOfRowsScored: number = 0;
-    private tetrisShapeSubject$: Subject<TetrisShape> = new Subject();
+    private tetrisShapeSubject: Subject<TetrisShape> = new Subject();
+    private subscriptions: Subscription[] = [];
 
-    constructor(readonly numOfBlocksWide: number,
-                readonly numOfBlocksHigh: number,
-                readonly tetrisGraphics: TetrisGraphics,
+    constructor(private readonly numOfBlocksWide: number,
+                private readonly numOfBlocksHigh: number,
+                private readonly tetrisGraphics: TetrisGraphics,
                 private tetrisScoreDiv: HTMLElement) {
         this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
@@ -35,19 +37,21 @@ export class TetrisGameController {
             }
         };
 
-        keyboardObservable$.pipe(
-            combineLatest(this.tetrisShapeSubject$),
-            tap(([ action, shape ]) => this.performAction(shape, action)),
-            map(([ , shape ]) => shape)
-        ).subscribe(drawGraphicsObserver);
+        this.subscriptions = [
+            keyboardObservable$.pipe(
+                combineLatest(this.tetrisShapeSubject),
+                tap(([ action, shape ]) => this.performAction(shape, action)),
+                map(([ , shape ]) => shape)
+            ).subscribe(drawGraphicsObserver),
 
-        Observable.interval(200).pipe(
-            combineLatest(this.tetrisShapeSubject$),
-            tap(([ , shape ]) => this.performAction(shape, TetrisActionName.DOWN)),
-            map(([ , shape ]) => shape)
-        ).subscribe(drawGraphicsObserver);
+            Observable.interval(200).pipe(
+                combineLatest(this.tetrisShapeSubject),
+                tap(([ , shape ]) => this.performAction(shape, TetrisActionName.DOWN)),
+                map(([ , shape ]) => shape)
+            ).subscribe(drawGraphicsObserver)
+        ];
 
-        this.tetrisShapeSubject$.next(getRandomTetrisShape());
+        this.tetrisShapeSubject.next(getRandomTetrisShape());
 
     }
 
@@ -57,7 +61,7 @@ export class TetrisGameController {
         return this.tetrisGrid.collisionDetection(clonedShape.blocks);
     }
 
-    private performAction(shape: TetrisShape, action: TetrisActionName) {
+    private performAction(shape: TetrisShape, action: TetrisActionName): void {
 
         switch (action) {
             case TetrisActionName.LEFT:
@@ -73,12 +77,17 @@ export class TetrisGameController {
             case TetrisActionName.DOWN:
                 if (!this.collisionDetected(shape, TetrisShape.moveDown)) {
                     shape.performMove(TetrisShape.moveDown);
+                } else if (this.tetrisGrid.isEndGame(shape.blocks)) {
+                    console.log('end game');
+                    this.tetrisGraphics.drawBlocks(shape.blocks);
+                    this.tetrisShapeSubject.complete();
+                    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
                 } else {
                     this.tetrisGrid.giveBlocksToGrid(shape.blocks);
                     let numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
                     this.updateScore(numOfFullRows);
                     numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
-                    this.tetrisShapeSubject$.next(getRandomTetrisShape());
+                    this.tetrisShapeSubject.next(getRandomTetrisShape());
                 }
                 break;
             case TetrisActionName.ROTATE:
@@ -89,7 +98,7 @@ export class TetrisGameController {
 
     }
 
-    private updateScore(linesCompleted: number[] = []) {
+    private updateScore(linesCompleted: number[] = []): void {
         this.score += 100 * linesCompleted.length;
         this.numberOfRowsScored += linesCompleted.length;
 
