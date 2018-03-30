@@ -11,8 +11,12 @@ export class TetrisGrid {
         }
     }
 
+    public static isEndGame(blocks: TetrisBlock[]): boolean {
+      return blocks.some((block) => block.yPos < 0);
+    }
+
     public getAllBlocks(): TetrisBlock[] {
-        let blocks: TetrisBlock[] = [];
+        const blocks: TetrisBlock[] = [];
         this.blocksMap.forEach((value) => {
             blocks.push(...value);
         });
@@ -21,20 +25,20 @@ export class TetrisGrid {
 
     public giveBlocksToGrid(blocks: TetrisBlock[]) {
         blocks.forEach((block: TetrisBlock) => {
-            this.blocksMap.get(block.yPos)!.push(block);
+            this.blocksMap.get(block.yPos).push(block);
         });
     }
 
     public collisionDetection(blocks: TetrisBlock[]): boolean {
         return blocks
             .filter((block) => this.collisionDetected(block) || block.yPos > this.numOfBlocksHigh - 1)
-            .length > 0
+            .length > 0;
     }
 
     public detectFullRows(): number[] {
-        let rowNumbersWhoAreFull: number[] = [];
+        const rowNumbersWhoAreFull: number[] = [];
         for (let i = 0; i < this.numOfBlocksHigh; i++) {
-            if (this.blocksMap.get(i)!.length === this.numOfBlocksWide) {
+            if (this.blocksMap.get(i).length === this.numOfBlocksWide) {
                 rowNumbersWhoAreFull.push(i);
             }
         }
@@ -43,28 +47,24 @@ export class TetrisGrid {
 
     public removeRow(rowIndex: number) {
         for (let i = rowIndex; i >= 1; i--) {
-            this.blocksMap.set(i, this.blocksMap.get(i - 1)!);
-            for (let block of this.blocksMap.get(i)!) {
+            this.blocksMap.set(i, this.blocksMap.get(i - 1));
+            for (const block of this.blocksMap.get(i)) {
                 block.yPos = i;
             }
         }
         this.blocksMap.set(0, []);
     }
 
-    public isEndGame(blocks: TetrisBlock[]): boolean {
-        return blocks.some((block) => block.yPos < 0);
-    }
-
     private collisionDetected(block: TetrisBlock): boolean {
         return block.xPos < 0 || block.xPos > this.numOfBlocksWide - 1 || block.yPos > this.numOfBlocksHigh - 1 ||
-            this.isBlockAtPosition(block.xPos, block.yPos)
+            this.isBlockAtPosition(block.xPos, block.yPos);
     }
 
     private isBlockAtPosition(x: number, y: number): boolean {
         if (y < 0) {
             return false;
         }
-        for (let block of this.blocksMap.get(y)!) {
+        for (const block of this.blocksMap.get(y)) {
             if (block.xPos === x && block.yPos === y) {
                 return true;
             }

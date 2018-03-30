@@ -12,12 +12,7 @@ export class SShape extends TetrisShape {
             { xPos: 4, yPos: -2, color: SHAPE_COLOR },
             { xPos: 5, yPos: -2, color: SHAPE_COLOR },
             { xPos: 5, yPos: -1, color: SHAPE_COLOR }
-        )
-    }
-
-    public rotate(shape: TetrisShape): void {
-        SShape.rotateShape(shape);
-        shape.rotatePosition = (shape.rotatePosition + 1) % 2;
+        );
     }
 
     private static rotateShape(shape: TetrisShape) {
@@ -41,5 +36,10 @@ export class SShape extends TetrisShape {
                 shape.blocks[ 3 ].xPos += 2;
                 break;
         }
+    }
+
+    public rotate(shape: TetrisShape): void {
+      SShape.rotateShape(shape);
+      shape.rotatePosition = (shape.rotatePosition + 1) % 2;
     }
 }

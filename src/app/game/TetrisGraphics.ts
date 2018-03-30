@@ -16,8 +16,8 @@ export class TetrisCanvasGraphics implements TetrisGraphics {
     }
 
     public drawBlocks(blocks: TetrisBlock[]): void {
-        for (let block of blocks) {
-            this.drawBlock(block)
+        for (const block of blocks) {
+            this.drawBlock(block);
         }
     }
 
@@ -30,7 +30,7 @@ export class TetrisCanvasGraphics implements TetrisGraphics {
         this.ctx.rect(block.xPos * this.pixelWidth, block.yPos * this.pixelHeight, this.pixelHeight, this.pixelWidth);
         this.ctx.fillStyle = block.color;
         this.ctx.lineWidth = 4;
-        this.ctx.strokeStyle = "black";
+        this.ctx.strokeStyle = 'black';
         this.ctx.fill();
         this.ctx.stroke();
     }

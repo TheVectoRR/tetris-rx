@@ -13,12 +13,12 @@ export interface TetrisBlock {
     color: string;
 }
 
-export enum TetrisActionName{ LEFT, RIGHT, DOWN, ROTATE, EMPTY }
+export enum TetrisActionName { LEFT, RIGHT, DOWN, ROTATE, EMPTY }
 
-export enum TetrisShapeName{ NUMBER_OF_SHAPES = 7, ISHAPE= 0, JSHAPE =1, LSHAPE=2, OSHAPE=3, SSHAPE=4, TSHAPE=5, ZSHAPE=6 }
+export enum TetrisShapeName { NUMBER_OF_SHAPES= 7, ISHAPE= 0, JSHAPE = 1, LSHAPE= 2, OSHAPE= 3, SSHAPE= 4, TSHAPE= 5, ZSHAPE= 6 }
 
 export function getTetrisShape(index: TetrisShapeName): TetrisShape {
-    switch(index){
+    switch (index) {
         case TetrisShapeName.ISHAPE:
             return new IShape();
         case TetrisShapeName.JSHAPE:

@@ -13,8 +13,8 @@ import { Subscription } from 'rxjs/Subscription';
 export class TetrisGameController {
 
     private tetrisGrid: TetrisGrid;
-    private score: number = 0;
-    private numberOfRowsScored: number = 0;
+    private score = 0;
+    private numberOfRowsScored = 0;
     private tetrisShapeSubject: Subject<TetrisShape> = new Subject();
     private subscriptions: Subscription[] = [];
 
@@ -55,7 +55,7 @@ export class TetrisGameController {
     }
 
     private collisionDetected(shape: TetrisShape, move: (shape: TetrisShape) => (void)): boolean {
-        let clonedShape: TetrisShape = shape.clone;
+        const clonedShape: TetrisShape = shape.clone;
         clonedShape.performMove(move);
         return this.tetrisGrid.collisionDetection(clonedShape.blocks);
     }
@@ -76,14 +76,14 @@ export class TetrisGameController {
             case TetrisActionName.DOWN:
                 if (!this.collisionDetected(shape, TetrisShape.moveDown)) {
                     shape.performMove(TetrisShape.moveDown);
-                } else if (this.tetrisGrid.isEndGame(shape.blocks)) {
+                } else if (TetrisGrid.isEndGame(shape.blocks)) {
                     console.log('end game');
                     this.tetrisGraphics.drawBlocks(shape.blocks);
                     this.tetrisShapeSubject.complete();
                     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
                 } else {
                     this.tetrisGrid.giveBlocksToGrid(shape.blocks);
-                    let numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
+                    const numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
                     this.updateScore(numOfFullRows);
                     numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
                     this.tetrisShapeSubject.next(getRandomTetrisShape());
