@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TetrisComponentComponent } from './tetris-component.component';
+import { TetrisCanvasComponent } from './tetris-canvas.component';
 
 describe('TetrisComponentComponent', () => {
-  let component: TetrisComponentComponent;
-  let fixture: ComponentFixture<TetrisComponentComponent>;
+  let component: TetrisCanvasComponent;
+  let fixture: ComponentFixture<TetrisCanvasComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TetrisComponentComponent ]
+      declarations: [ TetrisCanvasComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TetrisComponentComponent);
+    fixture = TestBed.createComponent(TetrisCanvasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-
 import { AppComponent } from './app.component';
-import { TetrisComponentComponent } from './game/tetris-component/tetris-component.component';
-
+import { TetrisGameModule } from './tetris-game/tetris-game.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TetrisComponentComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    TetrisGameModule
   ],
   providers: [],
   bootstrap: [AppComponent]

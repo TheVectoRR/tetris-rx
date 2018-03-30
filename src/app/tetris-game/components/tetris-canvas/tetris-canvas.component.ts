@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { TetrisGameController } from '../TetrisGameController';
-import { TetrisCanvasGraphics } from '../TetrisGraphics';
+import { TetrisGameController } from '../../core-game/TetrisGameController';
+import { TetrisCanvasGraphics } from '../../core-game/TetrisGraphics';
 
 const TETRIS_BLOCKS_WIDTH = 10;
 const TETRIS_BLOCKS_HEIGHT = 20;
@@ -8,11 +8,11 @@ const TETRIS_WIDTH = 350;
 const TETRIS_HEIGHT = 700;
 
 @Component({
-  selector: 'app-tetris-component',
-  templateUrl: './tetris-component.component.html',
-  styleUrls: ['./tetris-component.component.css']
+  selector: 'tetris-canvas',
+  templateUrl: './tetris-canvas.component.html',
+  styleUrls: ['./tetris-canvas.component.css']
 })
-export class TetrisComponentComponent implements AfterViewInit {
+export class TetrisCanvasComponent implements AfterViewInit {
 
   @ViewChild('tetrisCanvas') tetrisCanvas;
   public tetrisCanvasWidth = TETRIS_WIDTH;
