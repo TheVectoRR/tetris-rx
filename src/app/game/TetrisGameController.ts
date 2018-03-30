@@ -20,8 +20,7 @@ export class TetrisGameController {
 
     constructor(private readonly numOfBlocksWide: number,
                 private readonly numOfBlocksHigh: number,
-                private readonly tetrisGraphics: TetrisGraphics,
-                private tetrisScoreDiv: HTMLElement) {
+                private readonly tetrisGraphics: TetrisGraphics) {
         this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
         this.updateScore();
@@ -101,12 +100,5 @@ export class TetrisGameController {
     private updateScore(linesCompleted: number[] = []): void {
         this.score += 100 * linesCompleted.length;
         this.numberOfRowsScored += linesCompleted.length;
-
-        this.tetrisScoreDiv.innerHTML = `
-            <div>
-                <p><b>Score:</b> ${this.score}</p>
-                <p><b>lines:</b> ${this.numberOfRowsScored}</p>
-            </div>
-`
     }
 }

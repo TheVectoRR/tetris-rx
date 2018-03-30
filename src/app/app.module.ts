@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { TetrisComponentComponent } from './game/tetris-component/tetris-component.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TetrisComponentComponent
   ],
   imports: [
     BrowserModule
