@@ -1,7 +1,6 @@
 import { TetrisGrid } from './game-objects/tetris-grid';
 import { TetrisActionName } from './game-objects/tetris-utils';
 import { keyboardObservable$ } from './game-observers/keyboard-event.observable';
-import { TetrisGraphics } from './tetris-graphics';
 import { TetrisShape } from './game-objects/shape-objects/tetris-shape';
 import { getRandomTetrisShape } from './game-observers/random-shape-generator';
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +8,7 @@ import { combineLatest, map, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+import { TetrisCanvasGraphicsService } from '../services/tetris-graphics-canvas.service';
 
 export class TetrisGameController {
 
@@ -20,7 +20,7 @@ export class TetrisGameController {
 
     constructor(private readonly numOfBlocksWide: number,
                 private readonly numOfBlocksHigh: number,
-                private readonly tetrisGraphics: TetrisGraphics) {
+                private readonly tetrisGraphics: TetrisCanvasGraphicsService) {
         this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
         this.updateScore();

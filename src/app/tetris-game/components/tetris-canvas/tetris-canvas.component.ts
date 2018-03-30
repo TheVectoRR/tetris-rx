@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { TetrisGameController } from '../../core-game/tetris-game.controller';
 import { ConfigurationProviderService } from '../../services/configuration-provider.service';
-import {TetrisCanvasGraphics} from '../../core-game/tetris-graphics';
+import { TetrisCanvasGraphicsService } from '../../services/tetris-graphics-canvas.service';
 
 @Component({
   selector: 'tetris-canvas',
   templateUrl: './tetris-canvas.component.html',
-  styleUrls: [ './tetris-canvas.component.css' ]
+  styleUrls: [ './tetris-canvas.component.css' ],
+  providers: [ TetrisCanvasGraphicsService ]
 })
 export class TetrisCanvasComponent implements AfterViewInit {
 
@@ -17,7 +18,8 @@ export class TetrisCanvasComponent implements AfterViewInit {
     private tetrisGameController: TetrisGameController;
 
     constructor(
-        private readonly configuration: ConfigurationProviderService
+        private readonly configuration: ConfigurationProviderService,
+        private readonly tetrisCanvasGraphicsService: TetrisCanvasGraphicsService
     ) {
         this.tetrisCanvasWidth = configuration.pixelsWidth;
         this.tetrisCanvasHeight = configuration.pixelsHeight;
@@ -27,17 +29,12 @@ export class TetrisCanvasComponent implements AfterViewInit {
         const canvas = this.tetrisCanvas.nativeElement;
         const ctx = canvas.getContext('2d');
 
-        const tetrisGraphics = new TetrisCanvasGraphics(
-              ctx,
-            this.configuration.pixelsWidth / this.configuration.blocksWidth,
-            this.configuration.pixelsHeight / this.configuration.blocksHeight,
-            this.configuration.pixelsWidth,
-            this.configuration.pixelsHeight
-        );
+        this.tetrisCanvasGraphicsService.canvasContext = ctx;
+
         this.tetrisGameController = new TetrisGameController(
             this.configuration.blocksWidth,
             this.configuration.blocksHeight,
-            tetrisGraphics
+            this.tetrisCanvasGraphicsService
         );
         this.tetrisGameController.gameLoop();
     }
