@@ -1,18 +1,22 @@
 import { TetrisShape } from './TetrisShape';
-import { TetrisShapeName } from '../TetrisUtils';
+import { TetrisBlock } from '../TetrisUtils';
 
 const SHAPE_COLOR = 'orange';
 
 export class LShape extends TetrisShape {
 
-    constructor() {
-        super(TetrisShapeName.LSHAPE);
-        this._blocks.push(
-            {xPos: 4, yPos: -3, color: SHAPE_COLOR},
-            {xPos: 4, yPos: -2, color: SHAPE_COLOR},
-            {xPos: 4, yPos: -1, color: SHAPE_COLOR},
-            {xPos: 5, yPos: -1, color: SHAPE_COLOR}
-        );
+    constructor(blocks?: TetrisBlock[]) {
+        super();
+        if (blocks) {
+            this._blocks = blocks;
+        } else {
+            this._blocks.push(
+                { xPos: 4, yPos: -3, color: SHAPE_COLOR },
+                { xPos: 4, yPos: -2, color: SHAPE_COLOR },
+                { xPos: 4, yPos: -1, color: SHAPE_COLOR },
+                { xPos: 5, yPos: -1, color: SHAPE_COLOR }
+            );
+        }
     }
 
     private static rotateShape(shape: TetrisShape) {
@@ -57,7 +61,13 @@ export class LShape extends TetrisShape {
     }
 
     public rotate(shape: TetrisShape): void {
-      LShape.rotateShape(shape);
-      shape.rotatePosition = (shape.rotatePosition + 1) % 4;
+        LShape.rotateShape(shape);
+        shape.rotatePosition = (shape.rotatePosition + 1) % 4;
+    }
+
+    public cloneOfShape(): TetrisShape {
+        const shape = new LShape(this.cloneOfBlocks);
+        shape.rotatePosition = this.rotatePosition;
+        return shape;
     }
 }
