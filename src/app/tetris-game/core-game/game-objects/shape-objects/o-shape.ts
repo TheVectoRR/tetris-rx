@@ -1,5 +1,5 @@
-import { TetrisShape } from './TetrisShape';
-import { TetrisBlock } from '../TetrisUtils';
+import { TetrisShape } from './tetris-shape';
+import { TetrisBlock } from '../tetris-utils';
 
 const SHAPE_COLOR = 'yellow';
 

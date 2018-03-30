@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { TetrisGameController } from '../../core-game/TetrisGameController';
-import { TetrisCanvasGraphics } from '../../core-game/TetrisGraphics';
+import { TetrisGameController } from '../../core-game/tetris-game.controller';
+import { TetrisCanvasGraphics } from '../../core-game/tetris-graphics';
 
 const TETRIS_BLOCKS_WIDTH = 10;
 const TETRIS_BLOCKS_HEIGHT = 20;

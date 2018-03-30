@@ -1,4 +1,4 @@
-import { TetrisBlock } from './game-objects/TetrisUtils';
+import { TetrisBlock } from './game-objects/tetris-utils';
 
 export interface TetrisGraphics {
     drawBlocks(blocks: TetrisBlock[]): void;

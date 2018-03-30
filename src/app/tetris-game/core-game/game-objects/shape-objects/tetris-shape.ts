@@ -1,4 +1,4 @@
-import { TetrisBlock } from '../TetrisUtils';
+import { TetrisBlock } from '../tetris-utils';
 
 export abstract class TetrisShape {
 

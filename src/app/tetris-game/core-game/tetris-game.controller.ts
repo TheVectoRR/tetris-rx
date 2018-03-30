@@ -1,9 +1,9 @@
-import { TetrisGrid } from './game-objects/TetrisGrid';
-import { TetrisActionName } from './game-objects/TetrisUtils';
-import { keyboardObservable$ } from './game-observers/KeyboardEventObserver';
-import { TetrisGraphics } from './TetrisGraphics';
-import { TetrisShape } from './game-objects/shape-objects/TetrisShape';
-import { getRandomTetrisShape } from './game-observers/RandomShapeGeneratorObservable';
+import { TetrisGrid } from './game-objects/tetris-grid';
+import { TetrisActionName } from './game-objects/tetris-utils';
+import { keyboardObservable$ } from './game-observers/keyboard-event.observable';
+import { TetrisGraphics } from './tetris-graphics';
+import { TetrisShape } from './game-objects/shape-objects/tetris-shape';
+import { getRandomTetrisShape } from './game-observers/random-shape-generator';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest, map, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';

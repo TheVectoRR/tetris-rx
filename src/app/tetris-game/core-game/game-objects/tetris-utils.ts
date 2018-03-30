@@ -1,11 +1,11 @@
-import { TetrisShape } from './shape-objects/TetrisShape';
-import { IShape } from './shape-objects/IShape';
-import { JShape } from './shape-objects/JShape';
-import { LShape } from './shape-objects/LShape';
-import { OShape } from './shape-objects/OShape';
-import { SShape } from './shape-objects/SShape';
-import { TShape } from './shape-objects/TShape';
-import { ZShape } from './shape-objects/ZShape';
+import { TetrisShape } from './shape-objects/tetris-shape';
+import { IShape } from './shape-objects/i-shape';
+import { JShape } from './shape-objects/j-shape';
+import { LShape } from './shape-objects/l-shape';
+import { OShape } from './shape-objects/o-shape';
+import { SShape } from './shape-objects/s-shape';
+import { TShape } from './shape-objects/t-shape';
+import { ZShape } from './shape-objects/z-shape';
 
 export interface TetrisBlock {
     xPos: number;
