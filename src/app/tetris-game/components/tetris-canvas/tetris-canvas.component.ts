@@ -1,35 +1,45 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { TetrisGameController } from '../../core-game/tetris-game.controller';
-import { TetrisCanvasGraphics } from '../../core-game/tetris-graphics';
-
-const TETRIS_BLOCKS_WIDTH = 10;
-const TETRIS_BLOCKS_HEIGHT = 20;
-const TETRIS_WIDTH = 350;
-const TETRIS_HEIGHT = 700;
+import { ConfigurationProviderService } from '../../services/configuration-provider.service';
+import {TetrisCanvasGraphics} from '../../core-game/tetris-graphics';
 
 @Component({
   selector: 'tetris-canvas',
   templateUrl: './tetris-canvas.component.html',
-  styleUrls: ['./tetris-canvas.component.css']
+  styleUrls: [ './tetris-canvas.component.css' ]
 })
 export class TetrisCanvasComponent implements AfterViewInit {
 
-  @ViewChild('tetrisCanvas') tetrisCanvas;
-  public tetrisCanvasWidth = TETRIS_WIDTH;
-  public tetrisCanvasHeight = TETRIS_HEIGHT;
+    @ViewChild('tetrisCanvas') tetrisCanvas;
+    public tetrisCanvasWidth: number;
+    public tetrisCanvasHeight: number;
 
-  private tetrisGameController: TetrisGameController;
+    private tetrisGameController: TetrisGameController;
 
-  constructor() { }
+    constructor(
+        private readonly configuration: ConfigurationProviderService
+    ) {
+        this.tetrisCanvasWidth = configuration.pixelsWidth;
+        this.tetrisCanvasHeight = configuration.pixelsHeight;
+    }
 
-  public ngAfterViewInit() {
-    const canvas = this.tetrisCanvas.nativeElement;
-    const ctx = canvas.getContext('2d');
+    public ngAfterViewInit() {
+        const canvas = this.tetrisCanvas.nativeElement;
+        const ctx = canvas.getContext('2d');
 
-    const tetrisGraphics = new TetrisCanvasGraphics(
-      ctx, TETRIS_WIDTH / TETRIS_BLOCKS_WIDTH, TETRIS_HEIGHT / TETRIS_BLOCKS_HEIGHT, TETRIS_WIDTH, TETRIS_HEIGHT);
-    this.tetrisGameController = new TetrisGameController(TETRIS_BLOCKS_WIDTH, TETRIS_BLOCKS_HEIGHT, tetrisGraphics);
-    this.tetrisGameController.gameLoop();
-  }
+        const tetrisGraphics = new TetrisCanvasGraphics(
+              ctx,
+            this.configuration.pixelsWidth / this.configuration.blocksWidth,
+            this.configuration.pixelsHeight / this.configuration.blocksHeight,
+            this.configuration.pixelsWidth,
+            this.configuration.pixelsHeight
+        );
+        this.tetrisGameController = new TetrisGameController(
+            this.configuration.blocksWidth,
+            this.configuration.blocksHeight,
+            tetrisGraphics
+        );
+        this.tetrisGameController.gameLoop();
+    }
 
 }
