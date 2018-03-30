@@ -1,3 +1,4 @@
 .tetrisCanvas {
   background:lightgray;
+  border: 5px solid black;
 }
