@@ -1,16 +1,19 @@
-import { TetrisGrid } from './game-objects/tetris-grid';
-import { TetrisActionName } from './game-objects/tetris-utils';
-import { keyboardObservable$ } from './game-observers/keyboard-event.observable';
-import { TetrisShape } from './game-objects/shape-objects/tetris-shape';
-import { getRandomTetrisShape } from './game-observers/random-shape-generator';
+import { TetrisGrid } from '../core-game/game-objects/tetris-grid';
+import { TetrisActionName } from '../core-game/game-objects/tetris-utils';
+import { keyboardObservable$ } from '../core-game/game-observers/keyboard-event.observable';
+import { TetrisShape } from '../core-game/game-objects/shape-objects/tetris-shape';
+import { getRandomTetrisShape } from '../core-game/game-observers/random-shape-generator';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest, map, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { TetrisCanvasGraphicsService } from '../services/tetris-graphics-canvas.service';
+import { TetrisCanvasGraphicsService } from './tetris-graphics-canvas.service';
+import {Injectable} from '@angular/core';
+import {ConfigurationProviderService} from './configuration-provider.service';
 
-export class TetrisGameController {
+@Injectable()
+export class TetrisGameControllerService {
 
     private tetrisGrid: TetrisGrid;
     private score = 0;
@@ -18,12 +21,12 @@ export class TetrisGameController {
     private tetrisShapeSubject: Subject<TetrisShape> = new Subject();
     private subscriptions: Subscription[] = [];
 
-    constructor(private readonly numOfBlocksWide: number,
-                private readonly numOfBlocksHigh: number,
-                private readonly tetrisGraphics: TetrisCanvasGraphicsService) {
-        this.tetrisGrid = new TetrisGrid(numOfBlocksWide, numOfBlocksHigh);
+    constructor(
+        private readonly configuration: ConfigurationProviderService,
+        private readonly tetrisGraphics: TetrisCanvasGraphicsService
+    ) {
+        this.tetrisGrid = new TetrisGrid(configuration.blocksWidth, configuration.blocksHeight);
         this.tetrisGraphics.drawBlocks(this.tetrisGrid.getAllBlocks());
-        this.updateScore();
     }
 
     public gameLoop() {
