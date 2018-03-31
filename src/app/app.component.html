@@ -1,2 +1,7 @@
-<tetris-canvas></tetris-canvas>
+<tetris-canvas
+    (linesCompletedEvent) = "updateScore($event)">
+</tetris-canvas>
+<p>
+  Completed Lines: {{ numOfCompletedLines }}
+</p>
 

@@ -16,9 +16,8 @@ import {ConfigurationProviderService} from './configuration-provider.service';
 export class TetrisGameControllerService {
 
     private tetrisGrid: TetrisGrid;
-    private score = 0;
-    private numberOfRowsScored = 0;
     private tetrisShapeSubject: Subject<TetrisShape> = new Subject();
+    private linesCompletedSubject: Subject<number> = new Subject();
     private subscriptions: Subscription[] = [];
 
     constructor(
@@ -57,6 +56,10 @@ export class TetrisGameControllerService {
 
     }
 
+    public get linesCompleted$(): Observable<number> {
+        return this.linesCompletedSubject.asObservable();
+    }
+
     private collisionDetected(shape: TetrisShape, move: (shape: TetrisShape) => (void)): boolean {
         const clonedShape: TetrisShape = shape.clone;
         clonedShape.performMove(move);
@@ -87,7 +90,7 @@ export class TetrisGameControllerService {
                 } else {
                     this.tetrisGrid.giveBlocksToGrid(shape.blocks);
                     const numOfFullRows: number[] = this.tetrisGrid.detectFullRows();
-                    this.updateScore(numOfFullRows);
+                    this.linesCompletedSubject.next(numOfFullRows.length);
                     numOfFullRows.forEach((value) => this.tetrisGrid.removeRow(value));
                     this.tetrisShapeSubject.next(getRandomTetrisShape());
                 }
@@ -98,10 +101,5 @@ export class TetrisGameControllerService {
                 }
         }
 
-    }
-
-    private updateScore(linesCompleted: number[] = []): void {
-        this.score += 100 * linesCompleted.length;
-        this.numberOfRowsScored += linesCompleted.length;
     }
 }

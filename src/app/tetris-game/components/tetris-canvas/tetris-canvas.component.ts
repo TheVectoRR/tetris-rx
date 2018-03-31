@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import { ConfigurationProviderService } from '../../services/configuration-provider.service';
 import { TetrisGameControllerService } from '../../services/tetris-game-controller.service';
 import { TetrisCanvasGraphicsService } from '../../services/tetris-graphics-canvas.service';
@@ -15,6 +15,9 @@ import { TetrisCanvasGraphicsService } from '../../services/tetris-graphics-canv
 export class TetrisCanvasComponent implements AfterViewInit {
 
     @ViewChild('tetrisCanvas') tetrisCanvas;
+
+    @Output() linesCompletedEvent: EventEmitter<number> = new EventEmitter();
+
     public tetrisCanvasWidth: number;
     public tetrisCanvasHeight: number;
 
@@ -29,8 +32,11 @@ export class TetrisCanvasComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         const canvas = this.tetrisCanvas.nativeElement;
-
         this.tetrisCanvasGraphicsService.canvasContext = canvas.getContext('2d');
+
+        this.tetrisGameControllerService.linesCompleted$
+          .subscribe((numOfCompletedLines) => this.linesCompletedEvent.emit(numOfCompletedLines));
+
         this.tetrisGameControllerService.gameLoop();
     }
 
