@@ -1,16 +1,19 @@
-import { TetrisGrid } from '../core-game/game-objects/tetris-grid';
-import { TetrisActionName } from '../core-game/game-objects/tetris-utils';
-import { keyboardObservable$ } from '../core-game/game-observers/keyboard-event.observable';
-import { TetrisShape } from '../core-game/game-objects/shape-objects/tetris-shape';
-import { getRandomTetrisShape } from '../core-game/game-observers/random-shape-generator';
+import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs/Observable';
 import { combineLatest, map, tap } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+
+import { keyboardObservable$ } from '../core-game/game-observers/keyboard-event.observable';
+import { TetrisGrid } from '../core-game/game-objects/tetris-grid';
+import { TetrisActionName } from '../core-game/game-objects/tetris-utils';
+import { TetrisShape } from '../core-game/game-objects/shape-objects/tetris-shape';
+import { getRandomTetrisShape } from '../core-game/game-observers/random-shape-generator';
 import { TetrisCanvasGraphicsService } from './tetris-graphics-canvas.service';
-import {Injectable} from '@angular/core';
-import {ConfigurationProviderService} from './configuration-provider.service';
+import { ConfigurationProviderService } from './configuration-provider.service';
+import { GameTimerService } from './game-timer.service';
 
 @Injectable()
 export class TetrisGameControllerService {
@@ -21,6 +24,7 @@ export class TetrisGameControllerService {
     private subscriptions: Subscription[] = [];
 
     constructor(
+        public readonly timer: GameTimerService,
         private readonly configuration: ConfigurationProviderService,
         private readonly tetrisGraphics: TetrisCanvasGraphicsService
     ) {
@@ -45,7 +49,7 @@ export class TetrisGameControllerService {
                 map(([ , shape ]) => shape)
             ).subscribe(drawGraphicsObserver),
 
-            Observable.interval(200).pipe(
+            this.timer.gameTick$.pipe(
                 combineLatest(this.tetrisShapeSubject),
                 tap(([ , shape ]) => this.performAction(shape, TetrisActionName.DOWN)),
                 map(([ , shape ]) => shape)

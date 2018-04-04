@@ -1,10 +1,14 @@
 <tetris-canvas
+    [speedLevel] = "level"
     (linesCompletedEvent) = "updateScore($event)"
     (endGameEvent) = "endGame()">
 </tetris-canvas>
 <div>
     <p>
       Completed Lines: {{ numOfCompletedLines }}
+    </p>
+    <p>
+      Level: {{ level }}
     </p>
     <h3 *ngIf="!gameisRunning">Game Over</h3>
 </div>

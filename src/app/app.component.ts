@@ -9,9 +9,11 @@ export class AppComponent {
 
     public gameisRunning = true;
     public numOfCompletedLines = 0;
+    public level = 0;
 
     public updateScore(completedLines: number) {
         this.numOfCompletedLines += completedLines;
+        this.level = Math.floor(this.numOfCompletedLines / 10);
     }
 
     public endGame(): void {
