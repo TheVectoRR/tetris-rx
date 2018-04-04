@@ -7,10 +7,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+    public gameisRunning = true;
     public numOfCompletedLines = 0;
 
     public updateScore(completedLines: number) {
-      this.numOfCompletedLines += completedLines;
+        this.numOfCompletedLines += completedLines;
+    }
+
+    public endGame(): void {
+        this.gameisRunning = false;
     }
 
 }

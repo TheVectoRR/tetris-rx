@@ -56,6 +56,10 @@ export class TetrisGameControllerService {
 
     }
 
+    public get gameSubject$(): Observable<TetrisShape> {
+        return this.tetrisShapeSubject.asObservable();
+    }
+
     public get linesCompleted$(): Observable<number> {
         return this.linesCompletedSubject.asObservable();
     }
@@ -83,7 +87,6 @@ export class TetrisGameControllerService {
                 if (!this.collisionDetected(shape, TetrisShape.moveDown)) {
                     shape.performMove(TetrisShape.moveDown);
                 } else if (TetrisGrid.isEndGame(shape.blocks)) {
-                    console.log('end game');
                     this.tetrisGraphics.drawBlocks(shape.blocks);
                     this.tetrisShapeSubject.complete();
                     this.subscriptions.forEach((subscription) => subscription.unsubscribe());

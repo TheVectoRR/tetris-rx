@@ -1,7 +1,12 @@
 <tetris-canvas
-    (linesCompletedEvent) = "updateScore($event)">
+    (linesCompletedEvent) = "updateScore($event)"
+    (endGameEvent) = "endGame()">
 </tetris-canvas>
-<p>
-  Completed Lines: {{ numOfCompletedLines }}
-</p>
+<div>
+    <p>
+      Completed Lines: {{ numOfCompletedLines }}
+    </p>
+    <h3 *ngIf="!gameisRunning">Game Over</h3>
+</div>
+
 
