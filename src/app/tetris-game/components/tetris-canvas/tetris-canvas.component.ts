@@ -10,7 +10,7 @@ import {
 import { ConfigurationProviderService } from '../../services/configuration-provider.service';
 import { TetrisGameControllerService } from '../../services/tetris-game-controller.service';
 import { TetrisCanvasGraphicsService } from '../../services/tetris-graphics-canvas.service';
-import {GameTimerService} from '../../services/game-timer.service';
+import { GameTimerService } from '../../services/game-timer.service';
 
 @Component({
   selector: 'tetris-canvas',
@@ -24,7 +24,7 @@ import {GameTimerService} from '../../services/game-timer.service';
 })
 export class TetrisCanvasComponent implements OnInit, AfterViewInit {
 
-    @ViewChild('tetrisCanvas') tetrisCanvas;
+    @ViewChild('tetrisCanvas', {static: false}) tetrisCanvas;
 
     @Output() endGameEvent: EventEmitter<void> = new EventEmitter();
     @Output() linesCompletedEvent: EventEmitter<number> = new EventEmitter();

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { startWith, switchMap } from 'rxjs/operators';
-import { interval } from 'rxjs/observable/interval';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { interval } from 'rxjs/internal/observable/interval';
 
 @Injectable()
 export class GameTimerService {

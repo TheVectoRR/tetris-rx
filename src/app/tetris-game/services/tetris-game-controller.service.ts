@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
 import { combineLatest, map, tap } from 'rxjs/operators';
-import 'rxjs/add/observable/interval';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
 
 import { keyboardObservable$ } from '../core-game/game-observers/keyboard-event.observable';
 import { TetrisGrid } from '../core-game/game-objects/tetris-grid';
@@ -14,6 +10,9 @@ import { getRandomTetrisShape } from '../core-game/game-observers/random-shape-g
 import { TetrisCanvasGraphicsService } from './tetris-graphics-canvas.service';
 import { ConfigurationProviderService } from './configuration-provider.service';
 import { GameTimerService } from './game-timer.service';
+import { Subject } from 'rxjs/internal/Subject';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable()
 export class TetrisGameControllerService {

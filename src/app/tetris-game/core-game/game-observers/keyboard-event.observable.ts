@@ -1,11 +1,12 @@
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/map';
 import { TetrisActionName } from '../game-objects/tetris-utils';
+import { fromEvent } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs/operators';
 
 
-export let keyboardObservable$: Observable<TetrisActionName> = Observable.fromEvent(document, 'keydown')
-    .map((e: KeyboardEvent) => {
+export let keyboardObservable$: Observable<TetrisActionName> = fromEvent(document, 'keydown')
+  .pipe(
+    map((e: KeyboardEvent) => {
         if (e.key === 'ArrowDown') {
             return TetrisActionName.DOWN;
         } else if (e.key === 'ArrowLeft') {
@@ -18,4 +19,4 @@ export let keyboardObservable$: Observable<TetrisActionName> = Observable.fromEv
             return TetrisActionName.EMPTY;
         }
 
-    });
+    }));
